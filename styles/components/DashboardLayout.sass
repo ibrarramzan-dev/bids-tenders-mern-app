@@ -1,0 +1,39 @@
+@import '../theme/colors'
+
+.DashboardLayout
+  position: relative
+  display: flex
+
+  .DashboardLayout-DashboardMenu-wrapper
+    width: 16.8rem
+
+  .DashboardLayout-DashboardMenu-mobile-wrapper
+    display: none
+
+  .DashboardLayout-content
+    width: calc( 100% - 16.8rem )
+    display: flex
+    justify-content: center
+    padding: 1.7rem 3rem
+
+@media (max-width: 640px)
+  .DashboardLayout
+    display: block
+
+    .DashboardLayout-content
+      width: 100%
+      padding: 0
+
+      div
+        margin: 0.5rem 0.1rem
+      
+    .DashboardLayout-DashboardMenu-wrapper
+      display: none
+
+    .DashboardLayout-DashboardMenu-mobile-wrapper
+      display: block !important
+      border-bottom: 1px solid $separator-grey
+      margin-top: -1.15rem
+
+    .dashboard-heading
+      margin-top: 0.96rem

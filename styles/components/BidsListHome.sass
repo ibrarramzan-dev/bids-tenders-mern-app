@@ -1,0 +1,58 @@
+@import '../theme/colors'
+@import '../theme/text'
+  
+.BidsListHome
+  width: 100%
+  // padding: 0 3rem
+
+  .BidsListHome-actions-wrapper
+    display: flex
+    justify-content: center
+    // background: red
+    column-gap: 1rem
+    margin-top: 2.25rem
+    margin-bottom: 2.5rem
+
+    .BidsListHome-actions-input
+      width: 21rem
+
+    .BidsListHome-actions-select-status
+      width: 12rem
+
+    .BidsListHome-actions-select-classification
+      width: 20rem
+
+    .BidsListHome-actions-search-btn
+      width: 9.5rem
+      margin-left: 1rem
+
+      button
+        background: $primary-color
+
+  .BidsListHome-heading
+    font-size: $section-heading
+    text-align: center
+    margin-top: 2.4rem
+    margin-bottom: 1.6rem
+
+  .BidsListHome-table-wrapper
+    display: flex
+    justify-content: center
+    width: 100%
+
+@media (max-width: 1120px)
+  .BidsListHome-actions-wrapper
+    width: 80% !important
+    display: block !important
+    margin: auto
+
+    div
+      width: 100% !important
+      margin-bottom: 5%
+
+    .BidsListHome-actions-select-classification
+      margin-top: -4.5%
+
+    .BidsListHome-actions-search-btn
+      margin-top: -4%
+      margin-left: 0 !important

@@ -1,0 +1,56 @@
+@import '../theme/colors'
+
+.DashboardMenu
+  margin: 1.7rem 0 0.6rem 0
+  border-right: 1px solid $separator-grey
+  position: sticky
+  top: 24%
+  left: 0
+
+  ul
+    li
+      padding: 1rem 0
+      margin-right: 0.2rem
+      cursor: pointer
+
+      &:hover
+        background: $hover-grey
+        font-weight: 600
+        color: #343434
+
+      p
+        padding-left: 12%
+
+      .DashboardMenu-active-menu-item
+        font-weight: bold
+
+@media (max-width: 640px)
+  .DashboardLayout-DashboardMenu-mobile-wrapper
+    box-shadow: 0px 15px 10px -16px #bebebe
+    position: sticky
+    top: 7.1rem
+    left: 0
+    z-index: 100
+    background: #fff
+    
+    .DashboardMenu
+      overflow-x: scroll
+      overflow-y: hidden
+      height: 2rem
+
+      ul
+        display: flex
+        width: 55.1rem
+        margin-top: -0.675rem
+
+        li
+          width: 20rem
+          height: 100%
+          // padding: 0.2rem 0.5rem
+          text-align: center
+          display: flex
+          align-items: center
+          justify-content: center
+
+          p
+            padding-left: 0

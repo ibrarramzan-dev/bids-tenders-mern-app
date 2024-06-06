@@ -1,0 +1,69 @@
+footer
+  display: flex
+  justify-content: space-between
+  height: 15rem
+  width: 100%
+  background: #171717
+  color: #fff
+  padding-top: 3.5rem
+
+  div
+    width: 100%
+    text-align: center
+
+    &:first-of-type
+      text-align: left
+
+    ul
+      margin-top: 1.3rem
+
+      li
+        margin-bottom: 1.4rem
+        text-align: left
+        font-size: 0.9rem
+        color: #d9d9d9
+
+        a
+          color: #d9d9d9
+          text-decoration: none
+
+  .Footer-logo-col
+    img
+      margin-left: 1.9rem
+
+  .Footer-heading
+    font-weight: bold
+    // text-decoration: underline
+    font-size: 1.3rem
+    text-align: left
+
+  .Footer-mail-icon
+    margin-right: 0.7rem
+
+.Footer-bottom-text
+  text-align: center
+  color: #d9d9d9
+  background: #171717
+  padding-bottom: 1.5rem
+  margin-bottom: -120rem
+
+@media (max-width: 640px)
+  footer
+    height: 35rem
+    display: block
+
+    .Footer-logo-col
+      text-align: center !important
+
+      img
+        margin-left: 0
+        margin-bottom: 0.4rem
+
+    div
+      ul
+        li
+          text-align: center
+
+    .Footer-heading
+      text-align: center
+      margin-top: 2.3rem
