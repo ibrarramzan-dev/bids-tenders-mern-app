@@ -12,6 +12,9 @@ import {
 } from "@ant-design/icons";
 import logo from "@/public/images/logo.png";
 import bidClassification from "@/utils/bidClassification";
+import axios from "axios";
+import { loginUser } from "@/app/AppState/Features/user/userSlice";
+import { useDispatch } from "react-redux";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -94,6 +97,8 @@ export default function Header() {
   const [supplierSignupForm] = Form.useForm();
   const [clientSignupForm] = Form.useForm();
 
+  const dispatch = useDispatch();
+
   const headerMobileMenuRef = useRef(null);
 
   const onSignupConfirmModalOpen = () => {
@@ -147,10 +152,14 @@ export default function Header() {
     setIsClientSignupModalOpen(true);
   };
 
-  const onValuesChange = ({ fieldName }) => {
-    if (!fieldValue && fieldName) {
-      setFieldvalue(fieldName);
-    }
+  const onSupplierLogin = (values) => {
+    axios
+      .post("/api/suppliers/login", values)
+      .then((res) => {
+        const data = res.data.data;
+        dispatch(loginUser({ type: "supplier", data }));
+      })
+      .catch((err) => console.log("Error: ", err));
   };
 
   return (
@@ -292,7 +301,7 @@ export default function Header() {
         footer={false}
       >
         <div>
-          <Form onFinish={() => {}}>
+          <Form onFinish={onSupplierLogin}>
             <Form.Item
               label="Email"
               name="email"

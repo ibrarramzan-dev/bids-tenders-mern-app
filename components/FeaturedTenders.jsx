@@ -28,7 +28,7 @@ export default function FeaturedTenders() {
       >
         <Slider style={{ height: "13rem" }}>
           {bidsFeatured.map((bid, index) => (
-            <Slide index={index}>
+            <Slide index={index} key={bid.key}>
               <div
                 style={{
                   display: "flex",

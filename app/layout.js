@@ -4,6 +4,7 @@ import { ConfigProvider } from "antd";
 import "../styles/app.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { Providers } from "./AppState/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,9 +30,11 @@ export default function RootLayout({ children }) {
               },
             }}
           >
-            <Header />
-            {children}
-            <Footer />
+            <Providers>
+              <Header />
+              {children}
+              <Footer />
+            </Providers>
           </ConfigProvider>
         </AntdRegistry>
       </body>

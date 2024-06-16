@@ -9,11 +9,16 @@ export async function POST(request) {
 
   const supplier = await Supplier.findOne({ email, password });
 
-  return NextResponse.json(
-    {
-      message: supplier ? "Supplier authorized" : "Supplier not authorized",
-      success: supplier ? true : false,
-    },
-    { status: 200 }
-  );
+  const response = {
+    message: "Supplier not authorized",
+    success: false,
+  };
+
+  if (supplier) {
+    response.message = "Supplier authorized";
+    response.success = true;
+    response.data = supplier;
+  }
+
+  return NextResponse.json(response, { status: 200 });
 }
