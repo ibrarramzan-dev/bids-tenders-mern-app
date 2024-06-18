@@ -9,11 +9,16 @@ export async function POST(request) {
 
   const client = await Client.findOne({ email, password });
 
-  return NextResponse.json(
-    {
-      message: client ? "Client authorized" : "Client not authorized",
-      success: client ? true : false,
-    },
-    { status: 200 }
-  );
+  const response = {
+    message: "Client not authorized",
+    success: false,
+  };
+
+  if (client) {
+    response.message = "Client authorized";
+    response.success = true;
+    response.data = client;
+  }
+
+  return NextResponse.json(response, { status: 200 });
 }

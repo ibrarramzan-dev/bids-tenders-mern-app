@@ -1,20 +1,33 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Poppins } from "next/font/google";
-import { Button, Form, Input, Modal, Select, Upload } from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Space,
+  Upload,
+} from "antd";
 import {
   SearchOutlined,
   MenuOutlined,
   CloseOutlined,
   UploadOutlined,
+  UserOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import logo from "@/public/images/logo.png";
 import bidClassification from "@/utils/bidClassification";
 import axios from "axios";
-import { loginUser } from "@/app/AppState/Features/user/userSlice";
-import { useDispatch } from "react-redux";
+import { login, logout } from "@/app/AppState/Features/user/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -97,6 +110,11 @@ export default function Header() {
   const [supplierSignupForm] = Form.useForm();
   const [clientSignupForm] = Form.useForm();
 
+  const user = useSelector((state) => state.user);
+
+  // useEffect(() => {}, [user]);
+
+  console.log("user: ", user);
   const dispatch = useDispatch();
 
   const headerMobileMenuRef = useRef(null);
@@ -156,11 +174,40 @@ export default function Header() {
     axios
       .post("/api/suppliers/login", values)
       .then((res) => {
-        const data = res.data.data;
-        dispatch(loginUser({ type: "supplier", data }));
+        const { success, data } = res.data;
+
+        if (success) {
+          setIsSupplierLoginModalOpen(false);
+          dispatch(login({ type: "supplier", data }));
+        }
       })
       .catch((err) => console.log("Error: ", err));
   };
+
+  const onClientLogin = (values) => {
+    axios
+      .post("/api/clients/login", values)
+      .then((res) => {
+        const { success, data } = res.data;
+
+        if (success) {
+          setIsClientLoginModalOpen(false);
+          dispatch(login({ type: "client", data }));
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
+
+  const avatarDropdownItems = [
+    {
+      label: "Account",
+      key: "1",
+    },
+    {
+      label: <span onClick={() => dispatch(logout())}>Logout</span>,
+      key: "2",
+    },
+  ];
 
   return (
     <header className="shadow bottom">
@@ -172,25 +219,75 @@ export default function Header() {
 
       <div className="Header-right">
         <ul className={poppins.className}>
-          <li>
-            <Button
-              onClick={() => setIsLoginConfirmModalOpen(true)}
-              type="default"
-              size="large"
-            >
-              Login
-            </Button>
-          </li>
+          {user.type === "guest" ? (
+            <>
+              {" "}
+              <li>
+                <Button
+                  onClick={() => setIsLoginConfirmModalOpen(true)}
+                  type="default"
+                  size="large"
+                >
+                  Login
+                </Button>
+              </li>
+              <li className="Header-right-sign-up-btn-wrapper">
+                <Button
+                  onClick={onSignupConfirmModalOpen}
+                  type="primary"
+                  size="large"
+                >
+                  Sign Up
+                </Button>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <span
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: "500",
+                    marginLeft: "1.72rem",
+                  }}
+                >
+                  <Link
+                    href={`/${
+                      user.type === "supplier" ? "supplier" : "client"
+                    }-dashboard`}
+                    title="Dashboard"
+                  >
+                    MANAGE
+                  </Link>
+                </span>
+              </li>
 
-          <li className="Header-right-sign-up-btn-wrapper">
-            <Button
-              onClick={onSignupConfirmModalOpen}
-              type="primary"
-              size="large"
-            >
-              Sign Up
-            </Button>
-          </li>
+              <li>
+                <Dropdown
+                  menu={{
+                    items: avatarDropdownItems,
+                  }}
+                  overlayStyle={{ zIndex: "100000" }}
+                >
+                  <a>
+                    <Badge count={2} style={{ cursor: "default" }} title="">
+                      <Avatar
+                        shape="square"
+                        icon={
+                          <Image
+                            src={user.data.companyLogo}
+                            alt={user.data.companyName}
+                            width={200}
+                            height={200}
+                          />
+                        }
+                      />
+                    </Badge>
+                  </a>
+                </Dropdown>
+              </li>
+            </>
+          )}
         </ul>
 
         <MenuOutlined className="Header-hamburger" onClick={onOpenMenu} />
@@ -351,7 +448,7 @@ export default function Header() {
         footer={false}
       >
         <div>
-          <Form onFinish={() => {}}>
+          <Form onFinish={onClientLogin}>
             <Form.Item
               label="Email"
               name="email"
