@@ -6,9 +6,18 @@ export async function POST(request) {
   const { companyName, companyLogo, email, password, telephone } =
     await request.json();
   await connectMongoDB();
-  await Client.create({ companyName, companyLogo, email, password, telephone });
+  const newClient = await Client.create({
+    companyName,
+    companyLogo,
+    email,
+    password,
+    telephone,
+  });
 
-  return NextResponse.json({ message: "Client created" }, { status: 201 });
+  return NextResponse.json(
+    { message: "Client created", status: true, data: newClient },
+    { status: 201 }
+  );
 }
 
 export async function GET() {

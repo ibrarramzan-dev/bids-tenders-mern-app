@@ -1,58 +1,58 @@
 const bidClassification = [
   {
-    value: "business-services-supplies",
+    value: "Business Services/Supplies",
     label: "Business Services/Supplies",
   },
   {
-    value: "consulting-services",
+    value: "Consulting Services",
     label: "Consulting Services",
   },
   {
-    value: "medical-surgical",
+    value: "Medical/Surgical",
     label: "Medical/Surgical",
   },
   {
-    value: "office-supplies",
+    value: "Office Supplies",
     label: "Office Supplies",
   },
   {
-    value: "construction",
+    value: "Construction",
     label: "Construction",
   },
   {
-    value: "computers-telecommunications-ict-equipment",
+    value: "Computers, Telecommunications ICT Equipment",
     label: "Computers, Telecommunications ICT Equipment",
   },
   {
-    value: "educational-recreational",
+    value: "Educational/Recreational",
     label: "Educational/Recreational",
   },
   {
-    value: "electronics-appliances",
+    value: "Electronics/Appliances",
     label: "Electronics/Appliances",
   },
   {
-    value: "energy-fuel-chemical",
+    value: "Energy/Fuel/Chemical",
     label: "Energy/Fuel/Chemical",
   },
   {
-    value: "automotive-industrial",
+    value: "Automotive/Industrial",
     label: "Automotive/Industrial",
   },
   {
-    value: "agriculture-forestry-mining",
+    value: "Agriculture/Forestry/Mining",
     label: "Agriculture/Forestry/Mining",
   },
   {
-    value: "food-industry",
+    value: "Food Industry",
     label: "Food Industry",
   },
   {
-    value: "law-legal",
+    value: "Law/Legal",
     label: "Law/Legal",
   },
   {
-    value: "other",
+    value: "Other",
     label: "Other",
   },
 ];

@@ -22,11 +22,13 @@ import {
   UploadOutlined,
   UserOutlined,
   DownOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 import logo from "@/public/images/logo.png";
 import bidClassification from "@/utils/bidClassification";
 import axios from "axios";
 import { login, logout } from "@/app/AppState/Features/user/userSlice";
+import { CldUploadWidget } from "next-cloudinary";
 import { useSelector, useDispatch } from "react-redux";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
@@ -198,6 +200,34 @@ export default function Header() {
       .catch((err) => console.log("Error: ", err));
   };
 
+  const onClientSignup = (values) => {
+    axios
+      .post("/api/clients", values)
+      .then((res) => {
+        const { status, data } = res.data;
+
+        if (status) {
+          setIsClientSignupModalOpen(false);
+          dispatch(login({ type: "client", data }));
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
+
+  const onSupplierSignup = (values) => {
+    axios
+      .post("/api/suppliers", values)
+      .then((res) => {
+        const { status, data } = res.data;
+
+        if (status) {
+          setIsSupplierSignupModalOpen(false);
+          dispatch(login({ type: "supplier", data }));
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
+
   const avatarDropdownItems = [
     {
       label: "Account",
@@ -267,7 +297,7 @@ export default function Header() {
                   menu={{
                     items: avatarDropdownItems,
                   }}
-                  overlayStyle={{ zIndex: "100000" }}
+                  overlayStyle={{ zIndex: "10000" }}
                 >
                   <a>
                     <Badge count={2} style={{ cursor: "default" }} title="">
@@ -498,7 +528,7 @@ export default function Header() {
         footer={false}
       >
         <div className="Header-signup-modal-form-wrapper">
-          <Form form={supplierSignupForm} onFinish={() => {}}>
+          <Form form={supplierSignupForm} onFinish={onSupplierSignup}>
             <p className="modal-sub-heading">Supplier Company Details</p>
 
             <Form.Item
@@ -526,9 +556,42 @@ export default function Header() {
                 },
               ]}
             >
-              <Upload {...uploadProps}>
-                <Button icon={<UploadOutlined />}>Upload logo</Button>
-              </Upload>
+              <CldUploadWidget
+                cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME}
+                onSuccess={(result) => {
+                  supplierSignupForm.setFields([
+                    {
+                      name: "companyLogo",
+                      value: result.info.secure_url,
+                      errors: [],
+                    },
+                  ]);
+                }}
+                buttonText="Custom Upload Button"
+              >
+                {({ open }) => (
+                  <div className="Header-signup-modal-form-upload-wrapper">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        open();
+                      }}
+                      className="Header-signup-modal-form-upload-btn"
+                    >
+                      Upload Image
+                    </button>
+
+                    <p>
+                      {supplierSignupForm.getFieldValue("companyLogo") ? (
+                        <CheckOutlined style={{ color: "green" }} />
+                      ) : (
+                        ""
+                      )}
+                    </p>
+                  </div>
+                )}
+              </CldUploadWidget>
             </Form.Item>
 
             <Form.Item
@@ -646,8 +709,8 @@ export default function Header() {
         <div className="Header-signup-modal-form-wrapper">
           <Form
             form={clientSignupForm}
+            onFinish={onClientSignup}
             onValuesChange={(values) => setClientSignupFormValues(values)}
-            onFinish={() => {}}
           >
             <p className="modal-sub-heading">Client Company Details</p>
 
@@ -664,6 +727,7 @@ export default function Header() {
             >
               <Input placeholder="Enter company name" />
             </Form.Item>
+
             <Form.Item
               label="Company Logo"
               name="companyLogo"
@@ -675,9 +739,42 @@ export default function Header() {
                 },
               ]}
             >
-              <Upload {...uploadProps}>
-                <Button icon={<UploadOutlined />}>Upload logo</Button>
-              </Upload>
+              <CldUploadWidget
+                cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME}
+                onSuccess={(result) => {
+                  clientSignupForm.setFields([
+                    {
+                      name: "companyLogo",
+                      value: result.info.secure_url,
+                      errors: [],
+                    },
+                  ]);
+                }}
+                buttonText="Custom Upload Button"
+              >
+                {({ open }) => (
+                  <div className="Header-signup-modal-form-upload-wrapper">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        open();
+                      }}
+                      className="Header-signup-modal-form-upload-btn"
+                    >
+                      Upload Image
+                    </button>
+
+                    <p>
+                      {clientSignupForm.getFieldValue("companyLogo") ? (
+                        <CheckOutlined style={{ color: "green" }} />
+                      ) : (
+                        ""
+                      )}
+                    </p>
+                  </div>
+                )}
+              </CldUploadWidget>
             </Form.Item>
 
             <p className="modal-sub-heading">Client User Details</p>

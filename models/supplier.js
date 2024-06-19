@@ -4,7 +4,7 @@ const supplierSchema = new Schema(
   {
     companyName: String,
     companyLogo: String,
-    scopeOfOperation: String,
+    scopeOfOperation: [String],
     experience: Number,
     email: String,
     password: String,

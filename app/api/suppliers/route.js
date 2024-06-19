@@ -13,7 +13,7 @@ export async function POST(request) {
     telephone,
   } = await request.json();
   await connectMongoDB();
-  await Supplier.create({
+  const newSupplier = await Supplier.create({
     companyName,
     companyLogo,
     scopeOfOperation,
@@ -23,7 +23,10 @@ export async function POST(request) {
     telephone,
   });
 
-  return NextResponse.json({ message: "Supplier created" }, { status: 201 });
+  return NextResponse.json(
+    { message: "Supplier created", status: true, data: newSupplier },
+    { status: 201 }
+  );
 }
 
 export async function GET() {
