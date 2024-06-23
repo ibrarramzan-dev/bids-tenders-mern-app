@@ -10,7 +10,6 @@ import ClientPostABid from "@/components/ClientPostABid";
 const dashboardMenu = [
   "Published bids",
   "Post a bid",
-  "Tender box",
   "Reports",
   "Evaluation panels",
   "Suppliers list",

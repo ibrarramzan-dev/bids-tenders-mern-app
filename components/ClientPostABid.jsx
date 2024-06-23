@@ -2,7 +2,7 @@ import bidClassification from "@/utils/bidClassification";
 import bidTypes from "@/utils/bidTypes";
 import regions from "@/utils/regions";
 import { Button, DatePicker, Form, Input, Select, Space } from "antd";
-const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 
 export default function ClientPostABid() {
   const onPostBid = (values) => {
@@ -111,17 +111,35 @@ export default function ClientPostABid() {
             },
           ]}
         >
-          <Space direction="vertical" size={12}>
-            <DatePicker
-              showTime
-              showSecond={false}
-              onChange={(value, dateString) => {
-                console.log("Selected Time: ", value);
-                console.log("Formatted Selected Time: ", dateString);
-              }}
-              onOk={(value) => console.log("onOk of DatePicker: ", value)}
-            />
-          </Space>
+          <DatePicker
+            showTime
+            showSecond={false}
+            onChange={(value, dateString) => {
+              console.log("Selected Time: ", value);
+              console.log("Formatted Selected Time: ", dateString);
+            }}
+            onOk={(value) => console.log("onOk of DatePicker: ", value)}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Bid description"
+          name="bidDiscription"
+          labelCol={{ span: 24 }}
+          rules={[
+            {
+              required: true,
+              message: "This field is required",
+            },
+          ]}
+        >
+          <TextArea
+            autoSize={{
+              minRows: 6,
+              maxRows: 8,
+            }}
+            placeholder="Enter bid description"
+          />
         </Form.Item>
 
         {/* <Form.Item
