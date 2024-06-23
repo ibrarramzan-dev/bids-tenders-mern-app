@@ -1,10 +1,15 @@
 import bidClassification from "@/utils/bidClassification";
 import bidTypes from "@/utils/bidTypes";
 import regions from "@/utils/regions";
-import { Button, DatePicker, Form, Input, Select, Space } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
+import { Button, Checkbox, DatePicker, Form, Input, Select, Space } from "antd";
+import { CldUploadWidget } from "next-cloudinary";
+const { useForm } = Form;
 const { TextArea } = Input;
 
 export default function ClientPostABid() {
+  const [clientPostABidForm] = useForm();
+
   const onPostBid = (values) => {
     console.log("onPostBid: ", values);
   };
@@ -13,7 +18,7 @@ export default function ClientPostABid() {
     <div>
       <p className="dashboard-heading">Post a bid</p>
 
-      <Form onFinish={onPostBid}>
+      <Form form={clientPostABidForm} onFinish={onPostBid}>
         <Form.Item
           label="Bid Classification"
           name="bidClassification"
@@ -142,9 +147,9 @@ export default function ClientPostABid() {
           />
         </Form.Item>
 
-        {/* <Form.Item
-          label="Company Logo"
-          name="companyLogo"
+        <Form.Item
+          label="Attachments"
+          name="attachments"
           labelCol={{ span: 24 }}
           rules={[
             {
@@ -156,10 +161,21 @@ export default function ClientPostABid() {
           <CldUploadWidget
             cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
             uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME}
+            options={{
+              clientAllowedFormats: [
+                "pdf",
+                "doc",
+                "docx",
+                "xls",
+                "xlsx",
+                "ppt",
+                "pptx",
+              ],
+            }}
             onSuccess={(result) => {
-              supplierSignupForm.setFields([
+              clientPostABidForm.setFields([
                 {
-                  name: "companyLogo",
+                  name: "attachments",
                   value: result.info.secure_url,
                   errors: [],
                 },
@@ -176,11 +192,11 @@ export default function ClientPostABid() {
                   }}
                   className="Header-signup-modal-form-upload-btn"
                 >
-                  Upload Image
+                  Upload documents
                 </button>
 
                 <p>
-                  {supplierSignupForm.getFieldValue("companyLogo") ? (
+                  {clientPostABidForm.getFieldValue("attachments") ? (
                     <CheckOutlined style={{ color: "green" }} />
                   ) : (
                     ""
@@ -189,7 +205,32 @@ export default function ClientPostABid() {
               </div>
             )}
           </CldUploadWidget>
-        </Form.Item> */}
+        </Form.Item>
+
+        {/* Premium users */}
+        <Form.Item name="featured" labelCol={{ span: 24 }}>
+          <Checkbox
+            onChange={(e) =>
+              console.log(`Featured checked = ${e.target.checked}`)
+            }
+          >
+            Do you want to feature this bid?
+          </Checkbox>
+        </Form.Item>
+
+        <Form.Item
+          label="Submission link or email"
+          name="submissionLinkOrEmail"
+          labelCol={{ span: 24 }}
+          rules={[
+            {
+              required: true,
+              message: "This field is required",
+            },
+          ]}
+        >
+          <Input placeholder="Enter submission link or email" />
+        </Form.Item>
 
         <Form.Item>
           <Button type="primary" htmlType="submit" className="submit-btn">
