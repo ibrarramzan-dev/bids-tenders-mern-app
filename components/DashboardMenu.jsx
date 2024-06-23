@@ -2,20 +2,22 @@ import { useState } from "react";
 import classnames from "classnames";
 import Link from "next/link";
 
-export default function DashboardMenu({ menu }) {
-  const [activeMenuItem, setActiveMenuItem] = useState("Home");
-
+export default function DashboardMenu({
+  menu,
+  activeMenuItem,
+  onMenuItemClick,
+}) {
   return (
     <div className="DashboardMenu">
       <ul>
         {menu.map((item) => (
-          <li key={item}>
+          <li key={item} onClick={() => onMenuItemClick(item)}>
             <p
               className={classnames({
                 "DashboardMenu-active-menu-item": activeMenuItem === item,
               })}
             >
-              {item === "Home" ? <Link href="/">Home</Link> : item}
+              {item}
             </p>
           </li>
         ))}

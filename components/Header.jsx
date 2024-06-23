@@ -806,6 +806,7 @@ export default function Header() {
             >
               <Input type="password" placeholder="Enter password" />
             </Form.Item>
+
             <Form.Item
               label="Telephone (Optional)"
               name="telephone"
@@ -821,6 +822,7 @@ export default function Header() {
                 placeholder="Enter telephone"
               />
             </Form.Item>
+
             <Form.Item>
               <Button type="primary" htmlType="submit" className="submit-btn">
                 Sign up
