@@ -1,24 +1,38 @@
 import bidClassification from "@/utils/bidClassification";
 import bidTypes from "@/utils/bidTypes";
 import regions from "@/utils/regions";
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Checkbox, DatePicker, Form, Input, Select, Space } from "antd";
 import { CldUploadWidget } from "next-cloudinary";
+import { Fragment, useState } from "react";
 const { useForm } = Form;
 const { TextArea } = Input;
 
 export default function ClientPostABid() {
+  const [committeeMembersFields, setCommitteeMembersFields] = useState([
+    { name: null, email: null },
+  ]);
+  const [clientPostABidFormValues, setClientPostABidFormValues] = useState();
   const [clientPostABidForm] = useForm();
 
   const onPostBid = (values) => {
     console.log("onPostBid: ", values);
   };
 
+  console.log(clientPostABidForm.getFieldValue("eTendering"));
+  console.log("clientPostABidFormValues: ", clientPostABidFormValues);
+
+  console.log("committeeMembersFields: ", committeeMembersFields);
+
   return (
     <div>
       <p className="dashboard-heading">Post a bid</p>
 
-      <Form form={clientPostABidForm} onFinish={onPostBid}>
+      <Form
+        form={clientPostABidForm}
+        onFinish={onPostBid}
+        onValuesChange={(values) => setClientPostABidFormValues(values)}
+      >
         <Form.Item
           label="Bid Classification"
           name="bidClassification"
@@ -207,17 +221,6 @@ export default function ClientPostABid() {
           </CldUploadWidget>
         </Form.Item>
 
-        {/* Premium users */}
-        <Form.Item name="featured" labelCol={{ span: 24 }}>
-          <Checkbox
-            onChange={(e) =>
-              console.log(`Featured checked = ${e.target.checked}`)
-            }
-          >
-            Do you want to feature this bid?
-          </Checkbox>
-        </Form.Item>
-
         <Form.Item
           label="Submission link or email"
           name="submissionLinkOrEmail"
@@ -231,6 +234,108 @@ export default function ClientPostABid() {
         >
           <Input placeholder="Enter submission link or email" />
         </Form.Item>
+
+        {/* Premium users */}
+        <Form.Item name="featured" labelCol={{ span: 24 }}>
+          <Checkbox
+            onChange={(e) =>
+              console.log(`Featured checked = ${e.target.checked}`)
+            }
+          >
+            Do you want to feature this bid?
+          </Checkbox>
+        </Form.Item>
+
+        {/* Paid plans */}
+        <Form.Item name="eTendering" labelCol={{ span: 24 }}>
+          <Checkbox
+            onChange={(e) => {
+              console.log(`eTendering checked = ${e.target.checked}`);
+              clientPostABidForm.setFieldValue("eTendering", e.target.checked);
+            }}
+          >
+            eTendering
+          </Checkbox>
+        </Form.Item>
+
+        {clientPostABidForm.getFieldValue("eTendering") ? (
+          <div>
+            {committeeMembersFields.map((field, index) => (
+              <Fragment key={index}>
+                <hr />
+
+                <Form.Item
+                  label={`Evaluation committee ${index + 1}`}
+                  name={`evaluationCommittee${index + 1}`}
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "This field is required",
+                    },
+                  ]}
+                >
+                  <Input
+                    placeholder="Enter committee member name"
+                    value={field.name || ""}
+                    onChange={(event) => {
+                      const newFields = [...committeeMembersFields];
+                      newFields[index].name = event.target.value;
+                      setCommitteeMembersFields(newFields);
+                    }}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Email"
+                  name="email"
+                  labelCol={{ span: 24 }}
+                  rules={[
+                    {
+                      required: true,
+                      message: "This field is required",
+                    },
+                  ]}
+                >
+                  <Input
+                    type="email"
+                    placeholder="Enter committee member email"
+                    value={field.email || ""}
+                    onChange={(event) => {
+                      const newFields = [...committeeMembersFields];
+                      newFields[index].email = event.target.value;
+                      setCommitteeMembersFields(newFields);
+                    }}
+                  />
+                </Form.Item>
+              </Fragment>
+
+              // <input
+              //   key={index}
+              //   type="text"
+              //   value={field.value || ""}
+              //   onChange={(index, event) => {
+              //     const newFields = [...committeeMembersFields];
+              //     newFields[index].value = event.target.value;
+              //     setCommitteeMembersFields(newFields);
+              //   }}
+              // />
+            ))}
+
+            <div
+              onClick={() => {
+                const newFields = [
+                  ...committeeMembersFields,
+                  { name: null, email: null },
+                ];
+                setCommitteeMembersFields(newFields);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              <PlusOutlined /> Add more committee members
+            </div>
+          </div>
+        ) : null}
 
         <Form.Item>
           <Button type="primary" htmlType="submit" className="submit-btn">
