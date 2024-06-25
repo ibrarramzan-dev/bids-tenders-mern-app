@@ -9,9 +9,7 @@ const { useForm } = Form;
 const { TextArea } = Input;
 
 export default function ClientPostABid() {
-  const [committeeMembersFields, setCommitteeMembersFields] = useState([
-    { name: null, email: null },
-  ]);
+  const [members, setMembers] = useState([{ name: "", email: "" }]);
   const [clientPostABidFormValues, setClientPostABidFormValues] = useState();
   const [clientPostABidForm] = useForm();
 
@@ -19,10 +17,18 @@ export default function ClientPostABid() {
     console.log("onPostBid: ", values);
   };
 
-  console.log(clientPostABidForm.getFieldValue("eTendering"));
-  console.log("clientPostABidFormValues: ", clientPostABidFormValues);
+  const handleAddMember = () => {
+    setMembers([...members, { name: "", email: "" }]);
+  };
 
-  console.log("committeeMembersFields: ", committeeMembersFields);
+  const handleInputChange = (index, event) => {
+    const { name, value } = event.target;
+    const newMembers = [...members];
+    newMembers[index][name] = value;
+    setMembers(newMembers);
+  };
+
+  console.log("members: ", members);
 
   return (
     <div>
@@ -260,7 +266,51 @@ export default function ClientPostABid() {
 
         {clientPostABidForm.getFieldValue("eTendering") ? (
           <div>
-            {committeeMembersFields.map((field, index) => (
+            {members.map((member, index) => (
+              <div key={index} style={{ marginBottom: "0.1rem" }}>
+                <div className="ClientPostABid-form-member-fields-wrapper">
+                  <p className="ClientPostABid-form-member-input-label">
+                    Member {index + 1} Name:
+                  </p>
+
+                  <input
+                    type="text"
+                    name="name"
+                    value={member.name}
+                    onChange={(event) => handleInputChange(index, event)}
+                    className="ClientPostABid-form-member-input"
+                  />
+                </div>
+
+                <div className="ClientPostABid-form-member-fields-wrapper">
+                  <p className="ClientPostABid-form-member-input-label">
+                    Member {index + 1} Email:
+                  </p>
+
+                  <input
+                    type="email"
+                    name="email"
+                    value={member.email}
+                    onChange={(event) => handleInputChange(index, event)}
+                    className="ClientPostABid-form-member-input"
+                  />
+                </div>
+                <br />
+              </div>
+            ))}
+
+            <div
+              onClick={handleAddMember}
+              style={{
+                cursor: "pointer",
+                marginTop: "-0.85rem",
+                marginBottom: "1.15rem",
+              }}
+            >
+              <PlusOutlined /> Add more committee members
+            </div>
+
+            {/* {committeeMembersFields.map((field, index) => (
               <Fragment key={index}>
                 <hr />
 
@@ -309,31 +359,7 @@ export default function ClientPostABid() {
                   />
                 </Form.Item>
               </Fragment>
-
-              // <input
-              //   key={index}
-              //   type="text"
-              //   value={field.value || ""}
-              //   onChange={(index, event) => {
-              //     const newFields = [...committeeMembersFields];
-              //     newFields[index].value = event.target.value;
-              //     setCommitteeMembersFields(newFields);
-              //   }}
-              // />
-            ))}
-
-            <div
-              onClick={() => {
-                const newFields = [
-                  ...committeeMembersFields,
-                  { name: null, email: null },
-                ];
-                setCommitteeMembersFields(newFields);
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <PlusOutlined /> Add more committee members
-            </div>
+            ))} */}
           </div>
         ) : null}
 
