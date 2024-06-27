@@ -23,7 +23,9 @@ export default function ClientPostABid() {
   const [members, setMembers] = useState([{ name: "", email: "" }]);
   const [clientPostABidFormValues, setClientPostABidFormValues] = useState();
   const [clientPostABidForm] = useForm();
-  const { agencyName } = useSelector((state) => state.user.data);
+  const { agencyName, agencyLogo, _id } = useSelector(
+    (state) => state.user.data
+  );
 
   const onPostBid = (values) => {
     if (clientPostABidForm.getFieldValue("eTendering")) {
@@ -35,6 +37,9 @@ export default function ClientPostABid() {
       "YYYY-MM-DDTHH:mm:ss.sssZ"
     );
     values.attachments = attachmentDocs;
+    values.agencyLogo = agencyLogo;
+    values.clientId = _id;
+    values.status = "Open";
 
     if (values.featured === undefined) {
       values.featured = false;

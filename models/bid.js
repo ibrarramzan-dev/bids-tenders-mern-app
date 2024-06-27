@@ -7,14 +7,17 @@ const membersSchema = new Schema({
 
 const bidSchema = new Schema(
   {
+    clientId: String,
     classification: [String],
     agencyName: String,
+    agencyLogo: String,
     title: String,
     type: String,
     region: String,
     city: String,
     submissionClosingDate: String,
     description: String,
+    status: String,
     attachments: [String],
     submissionLinkOrEmail: String,
     featured: Boolean,

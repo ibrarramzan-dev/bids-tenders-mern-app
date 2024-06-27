@@ -5,15 +5,20 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const {
-    bidClassification,
+    clientId,
+    classification,
     agencyName,
+    agencyLogo,
     title,
     type,
     region,
     city,
-    closingDate,
+    submissionClosingDate,
     description,
+    status,
+    attachments,
     submissionLinkOrEmail,
+    featured,
     eTendering,
     members,
   } = await request.json();
@@ -21,15 +26,20 @@ export async function POST(request) {
   await connectMongoDB();
 
   await Bid.create({
-    bidClassification,
+    clientId,
+    classification,
     agencyName,
+    agencyLogo,
     title,
     type,
     region,
     city,
-    closingDate,
+    submissionClosingDate,
     description,
+    status,
+    attachments,
     submissionLinkOrEmail,
+    featured,
     eTendering,
     members,
   });
@@ -42,9 +52,9 @@ export async function POST(request) {
 
 export async function GET() {
   await connectMongoDB();
-  const bids = await Bid.find({ isPublished: true });
+  const bids = await Bid.find();
 
-  return NextResponse.json({ bids });
+  return NextResponse.json(bids);
 }
 
 export async function DELETE(request) {
