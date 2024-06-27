@@ -1,19 +1,25 @@
 import mongoose, { Schema } from "mongoose";
 
+const membersSchema = new Schema({
+  name: String,
+  email: String,
+});
+
 const bidSchema = new Schema(
   {
-    bidClassification: String,
+    classification: [String],
     agencyName: String,
     title: String,
     type: String,
     region: String,
     city: String,
-    closingDate: String,
+    submissionClosingDate: String,
     description: String,
+    attachments: [String],
+    submissionLinkOrEmail: String,
+    featured: Boolean,
     eTendering: Boolean,
-    submissionLink: String,
-    submissionEmail: String,
-    isPublished: Boolean,
+    members: [membersSchema],
   },
   {
     timestamps: true,

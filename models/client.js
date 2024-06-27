@@ -7,7 +7,7 @@ const memberSchema = new Schema({
 
 const clientSchema = new Schema(
   {
-    companyName: String,
+    agencyName: String,
     companyLogo: String,
     email: String,
     password: String,

@@ -2,8 +2,8 @@ import mongoose, { Schema } from "mongoose";
 
 const supplierSchema = new Schema(
   {
-    companyName: String,
-    companyLogo: String,
+    agencyName: String,
+    agencyLogo: String,
     scopeOfOperation: [String],
     experience: Number,
     email: String,

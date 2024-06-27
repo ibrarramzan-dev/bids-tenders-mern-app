@@ -12,7 +12,9 @@ export async function POST(request) {
     password,
     telephone,
   } = await request.json();
+
   await connectMongoDB();
+
   const newSupplier = await Supplier.create({
     companyName,
     companyLogo,
@@ -24,13 +26,15 @@ export async function POST(request) {
   });
 
   return NextResponse.json(
-    { message: "Supplier created", status: true, data: newSupplier },
+    { message: "Supplier created", success: true, data: newSupplier },
     { status: 201 }
   );
 }
 
 export async function GET() {
   await connectMongoDB();
+
   const suppliers = await Supplier.find();
+
   return NextResponse.json({ suppliers });
 }

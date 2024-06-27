@@ -5,7 +5,9 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   const { companyName, companyLogo, email, password, telephone } =
     await request.json();
+
   await connectMongoDB();
+
   const newClient = await Client.create({
     companyName,
     companyLogo,
@@ -15,7 +17,7 @@ export async function POST(request) {
   });
 
   return NextResponse.json(
-    { message: "Client created", status: true, data: newClient },
+    { message: "Client created", success: true, data: newClient },
     { status: 201 }
   );
 }

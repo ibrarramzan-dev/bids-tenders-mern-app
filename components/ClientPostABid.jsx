@@ -2,19 +2,65 @@ import bidClassification from "@/utils/bidClassification";
 import bidTypes from "@/utils/bidTypes";
 import regions from "@/utils/regions";
 import { CheckOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Checkbox, DatePicker, Form, Input, Select, Space } from "antd";
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  notification,
+} from "antd";
+import axios from "axios";
 import { CldUploadWidget } from "next-cloudinary";
 import { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
 const { useForm } = Form;
 const { TextArea } = Input;
 
 export default function ClientPostABid() {
+  const [attachmentDocs, setAttachmentDocs] = useState([]);
   const [members, setMembers] = useState([{ name: "", email: "" }]);
   const [clientPostABidFormValues, setClientPostABidFormValues] = useState();
   const [clientPostABidForm] = useForm();
+  const { agencyName } = useSelector((state) => state.user.data);
 
   const onPostBid = (values) => {
-    console.log("onPostBid: ", values);
+    if (clientPostABidForm.getFieldValue("eTendering")) {
+      values.members = members;
+    }
+
+    values.agencyName = agencyName;
+    values.submissionClosingDate = values.submissionClosingDate.format(
+      "YYYY-MM-DDTHH:mm:ss.sssZ"
+    );
+    values.attachments = attachmentDocs;
+
+    if (values.featured === undefined) {
+      values.featured = false;
+    }
+
+    axios
+      .post("/api/bids", values)
+      .then((res) => {
+        const { success } = res.data;
+
+        if (success) {
+          notification.success({
+            message: "Success",
+            description: `Bid ${clientPostABidForm.getFieldValue(
+              "title"
+            )} has been published`,
+          });
+
+          clientPostABidForm.resetFields();
+          setAttachmentDocs([]);
+          setMembers([]);
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
+
+    console.log(values);
   };
 
   const handleAddMember = () => {
@@ -41,7 +87,7 @@ export default function ClientPostABid() {
       >
         <Form.Item
           label="Bid Classification"
-          name="bidClassification"
+          name="classification"
           labelCol={{ span: 24 }}
           rules={[
             {
@@ -61,7 +107,7 @@ export default function ClientPostABid() {
 
         <Form.Item
           label="Bid Title"
-          name="bidTitle"
+          name="title"
           labelCol={{ span: 24 }}
           rules={[
             {
@@ -75,7 +121,7 @@ export default function ClientPostABid() {
 
         <Form.Item
           label="Bid Type"
-          name="bidType"
+          name="type"
           labelCol={{ span: 24 }}
           rules={[
             {
@@ -149,7 +195,7 @@ export default function ClientPostABid() {
 
         <Form.Item
           label="Bid description"
-          name="bidDiscription"
+          name="description"
           labelCol={{ span: 24 }}
           rules={[
             {
@@ -193,6 +239,10 @@ export default function ClientPostABid() {
               ],
             }}
             onSuccess={(result) => {
+              console.log("result: ", result);
+
+              attachmentDocs.push(result.info.secure_url);
+
               clientPostABidForm.setFields([
                 {
                   name: "attachments",
@@ -309,57 +359,6 @@ export default function ClientPostABid() {
             >
               <PlusOutlined /> Add more committee members
             </div>
-
-            {/* {committeeMembersFields.map((field, index) => (
-              <Fragment key={index}>
-                <hr />
-
-                <Form.Item
-                  label={`Evaluation committee ${index + 1}`}
-                  name={`evaluationCommittee${index + 1}`}
-                  labelCol={{ span: 24 }}
-                  rules={[
-                    {
-                      required: true,
-                      message: "This field is required",
-                    },
-                  ]}
-                >
-                  <Input
-                    placeholder="Enter committee member name"
-                    value={field.name || ""}
-                    onChange={(event) => {
-                      const newFields = [...committeeMembersFields];
-                      newFields[index].name = event.target.value;
-                      setCommitteeMembersFields(newFields);
-                    }}
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  label="Email"
-                  name="email"
-                  labelCol={{ span: 24 }}
-                  rules={[
-                    {
-                      required: true,
-                      message: "This field is required",
-                    },
-                  ]}
-                >
-                  <Input
-                    type="email"
-                    placeholder="Enter committee member email"
-                    value={field.email || ""}
-                    onChange={(event) => {
-                      const newFields = [...committeeMembersFields];
-                      newFields[index].email = event.target.value;
-                      setCommitteeMembersFields(newFields);
-                    }}
-                  />
-                </Form.Item>
-              </Fragment>
-            ))} */}
           </div>
         ) : null}
 

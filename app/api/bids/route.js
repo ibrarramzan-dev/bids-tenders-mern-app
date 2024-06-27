@@ -13,12 +13,13 @@ export async function POST(request) {
     city,
     closingDate,
     description,
+    submissionLinkOrEmail,
     eTendering,
-    submissionLink,
-    submissionEmail,
-    isPublished,
+    members,
   } = await request.json();
+
   await connectMongoDB();
+
   await Bid.create({
     bidClassification,
     agencyName,
@@ -28,13 +29,15 @@ export async function POST(request) {
     city,
     closingDate,
     description,
+    submissionLinkOrEmail,
     eTendering,
-    submissionLink,
-    submissionEmail,
-    isPublished,
+    members,
   });
 
-  return NextResponse.json({ message: "Bid created" }, { status: 201 });
+  return NextResponse.json(
+    { message: "Bid created", success: true },
+    { status: 201 }
+  );
 }
 
 export async function GET() {

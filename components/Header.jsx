@@ -204,9 +204,9 @@ export default function Header() {
     axios
       .post("/api/clients", values)
       .then((res) => {
-        const { status, data } = res.data;
+        const { success, data } = res.data;
 
-        if (status) {
+        if (success) {
           setIsClientSignupModalOpen(false);
           dispatch(login({ type: "client", data }));
         }
@@ -218,9 +218,9 @@ export default function Header() {
     axios
       .post("/api/suppliers", values)
       .then((res) => {
-        const { status, data } = res.data;
+        const { success, data } = res.data;
 
-        if (status) {
+        if (success) {
           setIsSupplierSignupModalOpen(false);
           dispatch(login({ type: "supplier", data }));
         }
@@ -305,8 +305,8 @@ export default function Header() {
                         shape="square"
                         icon={
                           <Image
-                            src={user.data.companyLogo}
-                            alt={user.data.companyName}
+                            src={user.data.agencyLogo}
+                            alt={user.data.agencyName}
                             width={200}
                             height={200}
                           />
@@ -533,7 +533,7 @@ export default function Header() {
 
             <Form.Item
               label="Company Name"
-              name="companyName"
+              name="agencyName"
               labelCol={{ span: 24 }}
               rules={[
                 {
@@ -547,7 +547,7 @@ export default function Header() {
 
             <Form.Item
               label="Company Logo"
-              name="companyLogo"
+              name="agencyLogo"
               labelCol={{ span: 24 }}
               rules={[
                 {
@@ -562,7 +562,7 @@ export default function Header() {
                 onSuccess={(result) => {
                   supplierSignupForm.setFields([
                     {
-                      name: "companyLogo",
+                      name: "agencyLogo",
                       value: result.info.secure_url,
                       errors: [],
                     },
@@ -583,7 +583,7 @@ export default function Header() {
                     </button>
 
                     <p>
-                      {supplierSignupForm.getFieldValue("companyLogo") ? (
+                      {supplierSignupForm.getFieldValue("agencyLogo") ? (
                         <CheckOutlined style={{ color: "green" }} />
                       ) : (
                         ""
@@ -716,7 +716,7 @@ export default function Header() {
 
             <Form.Item
               label="Company Name"
-              name="companyName"
+              name="agencyName"
               labelCol={{ span: 24 }}
               rules={[
                 {
@@ -730,7 +730,7 @@ export default function Header() {
 
             <Form.Item
               label="Company Logo"
-              name="companyLogo"
+              name="agencyLogo"
               labelCol={{ span: 24 }}
               rules={[
                 {
@@ -745,7 +745,7 @@ export default function Header() {
                 onSuccess={(result) => {
                   clientSignupForm.setFields([
                     {
-                      name: "companyLogo",
+                      name: "agencyLogo",
                       value: result.info.secure_url,
                       errors: [],
                     },
@@ -766,7 +766,7 @@ export default function Header() {
                     </button>
 
                     <p>
-                      {clientSignupForm.getFieldValue("companyLogo") ? (
+                      {clientSignupForm.getFieldValue("agencyLogo") ? (
                         <CheckOutlined style={{ color: "green" }} />
                       ) : (
                         ""
