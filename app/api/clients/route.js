@@ -3,14 +3,14 @@ import Client from "@/models/client";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-  const { companyName, companyLogo, email, password, telephone } =
+  const { agencyName, agencyLogo, email, password, telephone } =
     await request.json();
 
   await connectMongoDB();
 
   const newClient = await Client.create({
-    companyName,
-    companyLogo,
+    agencyName,
+    agencyLogo,
     email,
     password,
     telephone,

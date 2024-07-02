@@ -11,41 +11,17 @@ import bidClassification from "@/utils/bidClassification";
 import FeaturedTenders from "./FeaturedTenders";
 import data from "@/utils/bidsData";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["500"] });
 
 export default function BidsListHome() {
-  const [bids, setBids] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
   const searchInput = useRef(null);
 
-  useEffect(() => {
-    axios
-      .get("/api/bids")
-      .then((res) => {
-        const bids = res.data;
-
-        const _bids = bids.map((bid) => {
-          const publishedDate = bid.createdAt.split("T")[0];
-          const submissionClosingDateArr = bid.submissionClosingDate.split("T");
-          const submissionClosingDate = submissionClosingDateArr[0];
-          const submissionClosingTime = submissionClosingDateArr[1];
-          const submissionClosingTimeArr = submissionClosingTime.split(":");
-          const _submissionClosingTime = `${submissionClosingTimeArr[0]}:${submissionClosingTimeArr[1]}`;
-
-          bid.createdAt = publishedDate;
-          bid.submissionClosingDate = `${submissionClosingDate} ${_submissionClosingTime}`;
-
-          return bid;
-        });
-
-        setBids(_bids);
-        // console.log("Bids: ", bids);
-      })
-      .catch((err) => console.log("Error: ", err));
-  }, []);
+  const bids = useSelector((state) => state.bids);
 
   const onChange = (value) => {
     console.log(`selected ${value}`);

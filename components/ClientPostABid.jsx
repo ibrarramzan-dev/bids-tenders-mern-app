@@ -13,7 +13,7 @@ import {
 } from "antd";
 import axios from "axios";
 import { CldUploadWidget } from "next-cloudinary";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 const { useForm } = Form;
 const { TextArea } = Input;
@@ -23,7 +23,7 @@ export default function ClientPostABid() {
   const [members, setMembers] = useState([{ name: "", email: "" }]);
   const [clientPostABidFormValues, setClientPostABidFormValues] = useState();
   const [clientPostABidForm] = useForm();
-  const { agencyName, agencyLogo, _id } = useSelector(
+  const { agencyName, agencyLogo, _id, subscription } = useSelector(
     (state) => state.user.data
   );
 
@@ -43,6 +43,10 @@ export default function ClientPostABid() {
 
     if (values.featured === undefined) {
       values.featured = false;
+    }
+
+    if (values.eTendering === undefined) {
+      values.eTendering = false;
     }
 
     axios
@@ -219,15 +223,9 @@ export default function ClientPostABid() {
         </Form.Item>
 
         <Form.Item
-          label="Attachments"
+          label="Attach additional documents"
           name="attachments"
           labelCol={{ span: 24 }}
-          rules={[
-            {
-              required: true,
-              message: "This field is required",
-            },
-          ]}
         >
           <CldUploadWidget
             cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
@@ -297,27 +295,34 @@ export default function ClientPostABid() {
         </Form.Item>
 
         {/* Premium users */}
-        <Form.Item name="featured" labelCol={{ span: 24 }}>
-          <Checkbox
-            onChange={(e) =>
-              console.log(`Featured checked = ${e.target.checked}`)
-            }
-          >
-            Do you want to feature this bid?
-          </Checkbox>
-        </Form.Item>
+        {subscription === "Premium" ? (
+          <Form.Item name="featured" labelCol={{ span: 24 }}>
+            <Checkbox
+              onChange={(e) =>
+                console.log(`Featured checked = ${e.target.checked}`)
+              }
+            >
+              Do you want to feature this bid?
+            </Checkbox>
+          </Form.Item>
+        ) : null}
 
         {/* Paid plans */}
-        <Form.Item name="eTendering" labelCol={{ span: 24 }}>
-          <Checkbox
-            onChange={(e) => {
-              console.log(`eTendering checked = ${e.target.checked}`);
-              clientPostABidForm.setFieldValue("eTendering", e.target.checked);
-            }}
-          >
-            eTendering
-          </Checkbox>
-        </Form.Item>
+        {subscription === "Standard" || subscription === "Premium" ? (
+          <Form.Item name="eTendering" labelCol={{ span: 24 }}>
+            <Checkbox
+              onChange={(e) => {
+                console.log(`eTendering checked = ${e.target.checked}`);
+                clientPostABidForm.setFieldValue(
+                  "eTendering",
+                  e.target.checked
+                );
+              }}
+            >
+              eTendering
+            </Checkbox>
+          </Form.Item>
+        ) : null}
 
         {clientPostABidForm.getFieldValue("eTendering") ? (
           <div>

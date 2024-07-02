@@ -8,11 +8,20 @@ const memberSchema = new Schema({
 const clientSchema = new Schema(
   {
     agencyName: String,
-    companyLogo: String,
+    agencyLogo: String,
     email: String,
     password: String,
     telephone: String,
     members: [memberSchema],
+    subscription: {
+      type: String,
+      enum: ["Starter", "Standard", "Premium"],
+      default: "Starter",
+    },
+    members: {
+      type: [],
+      default: [],
+    },
   },
   {
     timestamps: true,

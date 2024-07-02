@@ -14,6 +14,7 @@ import {
   Select,
   Space,
   Upload,
+  notification,
 } from "antd";
 import {
   SearchOutlined,
@@ -207,7 +208,18 @@ export default function Header() {
         const { success, data } = res.data;
 
         if (success) {
+          notification.success({
+            message: "Success",
+            description: (
+              <p>
+                Client <b>{clientSignupForm.getFieldValue("agencyName")}</b> has
+                been signed up successfully
+              </p>
+            ),
+          });
+
           setIsClientSignupModalOpen(false);
+          clientSignupForm.resetFields();
           dispatch(login({ type: "client", data }));
         }
       })

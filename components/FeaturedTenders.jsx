@@ -8,9 +8,14 @@ import {
 import "pure-react-carousel/dist/react-carousel.es.css";
 import FeaturedTenderCard from "./FeaturedTenderCard";
 import data from "@/utils/bidsData";
+import { useSelector } from "react-redux";
 
 export default function FeaturedTenders() {
   const bidsFeatured = data.filter((bid) => bid.featured);
+
+  const bids = useSelector((state) => state.bids);
+
+  const featuredBids = bids.filter((bid) => bid.featured);
 
   return (
     <section className="FeaturedTenders">
@@ -19,7 +24,7 @@ export default function FeaturedTenders() {
       <CarouselProvider
         naturalSlideWidth={100}
         naturalSlideHeight={125}
-        totalSlides={bidsFeatured.length}
+        totalSlides={featuredBids.length}
         isPlaying
         interval={4000}
         infinite
@@ -27,7 +32,7 @@ export default function FeaturedTenders() {
         // style={{ height: "1rem" }}
       >
         <Slider style={{ height: "13rem" }}>
-          {bidsFeatured.map((bid, index) => (
+          {featuredBids.map((bid, index) => (
             <Slide index={index} key={bid.key}>
               <div
                 style={{
@@ -38,10 +43,10 @@ export default function FeaturedTenders() {
                 }}
               >
                 <FeaturedTenderCard
-                  logo={bid.organizationLogo}
-                  coName={bid.organization}
-                  name={bid.name}
-                  classification={bid.classification}
+                  logo={bid.agencyLogo}
+                  coName={bid.agencyName}
+                  name={bid.title}
+                  classification={bid.classification.join(", ")}
                 />
               </div>
             </Slide>
