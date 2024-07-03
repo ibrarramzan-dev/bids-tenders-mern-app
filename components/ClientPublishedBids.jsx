@@ -1,13 +1,16 @@
 import { useRef, useState } from "react";
 import { Modal, Table, Input, Space, Button, Image } from "antd";
-import data from "@/utils/bidsData";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+import { useSelector } from "react-redux";
 
 export default function ClientPublishedBids() {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
   const [isViewInsightsModalOpen, setIsViewInsightsModalOpen] = useState(false);
+  const { user, bids } = useSelector((state) => state);
+
+  const thisUserBids = bids.filter((bid) => bid.clientId === user.data._id);
 
   const searchInput = useRef(null);
 
@@ -20,6 +23,7 @@ export default function ClientPublishedBids() {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText("");
@@ -131,10 +135,10 @@ export default function ClientPublishedBids() {
   const columns = [
     {
       title: "Bid name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "title",
+      key: "title",
       fixed: "left",
-      ...getColumnSearchProps("name"),
+      ...getColumnSearchProps("title"),
     },
     {
       title: "Status",
@@ -144,29 +148,24 @@ export default function ClientPublishedBids() {
     },
     {
       title: "Published date",
-      dataIndex: "publishedDate",
-      key: "publishedDate",
-      ...getColumnSearchProps("publishedDate"),
+      dataIndex: "createdAt",
+      key: "createdAt",
+      ...getColumnSearchProps("createdAt"),
     },
     {
       title: "Closing date",
-      dataIndex: "closingDate",
-      key: "closingDate",
-      ...getColumnSearchProps("closingDate"),
+      dataIndex: "submissionClosingDate",
+      key: "submissionClosingDate",
+      ...getColumnSearchProps("submissionClosingDate"),
     },
     {
       title: "Organization",
-      dataIndex: "organization",
-      key: "organization",
+      dataIndex: "agencyName",
+      key: "agencyName",
       render: (text, record) => {
         return (
           <div className="table-cell-flex-box">
-            <Image
-              src={record.organizationLogo}
-              alt={text}
-              width={20}
-              height={20}
-            />
+            <Image src={record.agencyLogo} alt={text} width={20} height={20} />
             <p style={{ textAlign: "center" }}>{text}</p>
           </div>
         );
@@ -220,7 +219,7 @@ export default function ClientPublishedBids() {
 
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={thisUserBids}
         pagination={{ pageSize: 50 }}
         scroll={{ x: 1200, y: 400 }}
       />

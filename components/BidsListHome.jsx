@@ -20,7 +20,6 @@ export default function BidsListHome() {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
   const searchInput = useRef(null);
-
   const bids = useSelector((state) => state.bids);
 
   const onChange = (value) => {
@@ -154,12 +153,12 @@ export default function BidsListHome() {
       fixed: "left",
       ...getColumnSearchProps("title"),
     },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   key: "status",
-    //   ...getColumnSearchProps("status"),
-    // },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      ...getColumnSearchProps("status"),
+    },
     {
       title: "Published date",
       dataIndex: "createdAt",

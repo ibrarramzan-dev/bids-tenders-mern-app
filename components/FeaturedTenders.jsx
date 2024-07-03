@@ -1,18 +1,9 @@
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext,
-} from "pure-react-carousel";
+import { CarouselProvider, Slider, Slide } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import FeaturedTenderCard from "./FeaturedTenderCard";
-import data from "@/utils/bidsData";
 import { useSelector } from "react-redux";
 
 export default function FeaturedTenders() {
-  const bidsFeatured = data.filter((bid) => bid.featured);
-
   const bids = useSelector((state) => state.bids);
 
   const featuredBids = bids.filter((bid) => bid.featured);
