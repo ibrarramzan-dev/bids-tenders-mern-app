@@ -6,6 +6,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import DashboardLayout from "@/components/DashboardLayout";
 import ClientPublishedBids from "@/components/ClientPublishedBids";
 import ClientPostABid from "@/components/ClientPostABid";
+import { useRouter } from "next/navigation";
 
 const dashboardMenu = [
   "Published bids",
@@ -16,7 +17,15 @@ const dashboardMenu = [
 ];
 
 export default function ClientDashboard() {
-  const [activeMenuItem, setActiveMenuItem] = useState(dashboardMenu[1]);
+  const router = useRouter();
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const userType = localStorage.getItem("userType");
+
+  if (!(isLoggedIn && userType === "client")) {
+    router.push("/");
+  }
+
+  const [activeMenuItem, setActiveMenuItem] = useState(dashboardMenu[0]);
 
   const onChange = (value) => {
     console.log(`selected ${value}`);

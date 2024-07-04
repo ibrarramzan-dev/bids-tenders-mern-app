@@ -7,7 +7,8 @@ import { useSelector } from "react-redux";
 export default function ClientPublishedBids() {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
-  const [isViewInsightsModalOpen, setIsViewInsightsModalOpen] = useState(false);
+  const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
+  const [isEditBidModalOpen, setIsEditBidModalOpen] = useState(false);
   const { user, bids } = useSelector((state) => state);
 
   const thisUserBids = bids.filter((bid) => bid.clientId === user.data._id);
@@ -178,7 +179,10 @@ export default function ClientPublishedBids() {
         return (
           <div className="ClientDashboard-action-cell-texts">
             <p>
-              <span className="ClientDashboard-action-cell-texts-item">
+              <span
+                onClick={() => setIsEditBidModalOpen(true)}
+                className="ClientDashboard-action-cell-texts-item"
+              >
                 Edit
               </span>
               <span className="ClientDashboard-action-cell-texts-item-separator-dot">
@@ -203,7 +207,7 @@ export default function ClientPublishedBids() {
       render: (text, record) => {
         return (
           <p
-            onClick={() => setIsViewInsightsModalOpen(true)}
+            onClick={() => setIsViewBidModalOpen(true)}
             className="table-view-text"
           >
             View
@@ -223,10 +227,20 @@ export default function ClientPublishedBids() {
         pagination={{ pageSize: 50 }}
         scroll={{ x: 1200, y: 400 }}
       />
+
+      <Modal
+        title={<p className="modal-heading">Edit Bid</p>}
+        open={isEditBidModalOpen}
+        onCancel={() => setIsEditBidModalOpen(false)}
+        footer={false}
+      >
+        <p style={{ textAlign: "center" }}>(placeholder)</p>
+      </Modal>
+
       <Modal
         title={<p className="modal-heading">Bid Insights</p>}
-        open={isViewInsightsModalOpen}
-        onCancel={() => setIsViewInsightsModalOpen(false)}
+        open={isViewBidModalOpen}
+        onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}
       >
         <p style={{ textAlign: "center" }}>(placeholder)</p>

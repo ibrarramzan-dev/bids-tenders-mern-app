@@ -195,6 +195,8 @@ export default function Header() {
 
         if (success) {
           setIsClientLoginModalOpen(false);
+          localStorage.setItem("userType", "client");
+          localStorage.setItem("isLoggedIn", true);
           dispatch(login({ type: "client", data }));
         }
       })
@@ -246,7 +248,17 @@ export default function Header() {
       key: "1",
     },
     {
-      label: <span onClick={() => dispatch(logout())}>Logout</span>,
+      label: (
+        <span
+          onClick={() => {
+            localStorage.removeItem("userType");
+            localStorage.removeItem("isLoggedIn");
+            dispatch(logout());
+          }}
+        >
+          Logout
+        </span>
+      ),
       key: "2",
     },
   ];
