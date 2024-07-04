@@ -7,6 +7,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import ClientPublishedBids from "@/components/ClientPublishedBids";
 import ClientPostABid from "@/components/ClientPostABid";
 import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 const dashboardMenu = [
   "Published bids",
@@ -18,10 +19,10 @@ const dashboardMenu = [
 
 export default function ClientDashboard() {
   const router = useRouter();
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  const userType = localStorage.getItem("userType");
 
-  if (!(isLoggedIn && userType === "client")) {
+  const { user } = useSelector((state) => state);
+
+  if (user?.type === "guest" || user?.type === "supplier") {
     router.push("/");
   }
 

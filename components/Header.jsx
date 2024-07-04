@@ -273,7 +273,7 @@ export default function Header() {
 
       <div className="Header-right">
         <ul className={poppins.className}>
-          {user.type === "guest" ? (
+          {user?.type === "guest" ? (
             <>
               {" "}
               <li>
@@ -307,7 +307,7 @@ export default function Header() {
                 >
                   <Link
                     href={`/${
-                      user.type === "supplier" ? "supplier" : "client"
+                      user?.type === "supplier" ? "supplier" : "client"
                     }-dashboard`}
                     title="Dashboard"
                   >
@@ -329,8 +329,8 @@ export default function Header() {
                         shape="square"
                         icon={
                           <Image
-                            src={user.data.agencyLogo}
-                            alt={user.data.agencyName}
+                            src={user?.data.agencyLogo}
+                            alt={user?.data.agencyName}
                             width={200}
                             height={200}
                           />
