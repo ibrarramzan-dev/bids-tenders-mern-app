@@ -35,9 +35,15 @@ export default function ClientDashboard() {
 
   const router = useRouter();
 
-  if (user?.type === "guest" || user?.type === "supplier") {
-    router.push("/");
-  }
+  useEffect(() => {
+    const userType = user.type;
+
+    if (userType) {
+      if (userType === "guest" || userType === "supplier") {
+        router.push("/");
+      }
+    }
+  }, [user]);
 
   const [activeMenuItem, setActiveMenuItem] = useState(dashboardMenu[0]);
 

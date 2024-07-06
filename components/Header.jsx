@@ -75,7 +75,7 @@ export default function Header() {
     const userData = localStorage.getItem("user");
 
     if (userData) {
-      dispatch(login(userData));
+      dispatch(login(JSON.parse(userData)));
     }
   }, []);
 

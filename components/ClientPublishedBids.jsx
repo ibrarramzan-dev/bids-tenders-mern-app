@@ -1,17 +1,35 @@
-import { useRef, useState } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { Modal, Table, Input, Space, Button, Image } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { bidsFormatTimeForTable } from "@/utils/helpers";
 
 export default function ClientPublishedBids() {
+  const [bids, setBids] = useState([]);
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
   const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
   const [isEditBidModalOpen, setIsEditBidModalOpen] = useState(false);
-  const { user, bids } = useSelector((state) => state);
+  const { user } = useSelector((state) => state);
 
-  const thisUserBids = bids.filter((bid) => bid.clientId === user.data._id);
+  console.log("user: ", user);
+  useEffect(() => {
+    if (user.data._id) {
+      axios
+        .get(`/api/bids/client-published/${user.data._id}`)
+        .then((res) => {
+          const bids = res.data;
+
+          const _bids = bidsFormatTimeForTable(bids);
+          setBids(_bids);
+        })
+        .catch((err) => console.log("Error: ", err));
+    }
+  }, [user]);
 
   const searchInput = useRef(null);
 
@@ -223,7 +241,7 @@ export default function ClientPublishedBids() {
 
       <Table
         columns={columns}
-        dataSource={thisUserBids}
+        dataSource={bids}
         pagination={{ pageSize: 50 }}
         scroll={{ x: 1200, y: 400 }}
       />
