@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
               token: {
                 // Seed Token
                 colorPrimary: "#0077b5",
-                borderRadius: 2,
+                borderRadius: 6,
 
                 // Alias Token
                 colorBgContainer: "#f6ffed",
