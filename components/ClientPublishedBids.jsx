@@ -1,15 +1,28 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Modal, Table, Input, Space, Button, Image } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  Modal,
+  Table,
+  Input,
+  Space,
+  Button,
+  Image,
+  Form,
+  DatePicker,
+  Checkbox,
+  Select,
+} from "antd";
+import { CheckOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { bidsFormatTimeForTable } from "@/utils/helpers";
+import ClientEditBid from "./ClientEditBid";
 
 export default function ClientPublishedBids() {
   const [bids, setBids] = useState([]);
+  const [activeEditBid, setActiveEditBid] = useState({});
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
   const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
@@ -198,7 +211,10 @@ export default function ClientPublishedBids() {
           <div className="ClientDashboard-action-cell-texts">
             <p>
               <span
-                onClick={() => setIsEditBidModalOpen(true)}
+                onClick={() => {
+                  setActiveEditBid(record);
+                  setIsEditBidModalOpen(true);
+                }}
                 className="ClientDashboard-action-cell-texts-item"
               >
                 Edit
@@ -252,7 +268,7 @@ export default function ClientPublishedBids() {
         onCancel={() => setIsEditBidModalOpen(false)}
         footer={false}
       >
-        <p style={{ textAlign: "center" }}>(placeholder)</p>
+        <ClientEditBid bid={activeEditBid} />
       </Modal>
 
       <Modal
