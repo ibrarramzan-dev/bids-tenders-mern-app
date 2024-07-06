@@ -31,6 +31,7 @@ import axios from "axios";
 import { login, logout } from "@/app/AppState/Features/user/userSlice";
 import { CldUploadWidget } from "next-cloudinary";
 import { useSelector, useDispatch } from "react-redux";
+import supplierExperience from "@/utils/supplierExperience";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -52,53 +53,6 @@ const uploadProps = {
   },
 };
 
-const supplierExperience = [
-  {
-    value: "1",
-    label: "1",
-  },
-  {
-    value: "2",
-    label: "2",
-  },
-  {
-    value: "3",
-    label: "3",
-  },
-  {
-    value: "4",
-    label: "4",
-  },
-  {
-    value: "5",
-    label: "5",
-  },
-  {
-    value: "6",
-    label: "6",
-  },
-  {
-    value: "7",
-    label: "7",
-  },
-  {
-    value: "8",
-    label: "8",
-  },
-  {
-    value: "9",
-    label: "9",
-  },
-  {
-    value: "10",
-    label: "10",
-  },
-  {
-    value: "10+",
-    label: "10+",
-  },
-];
-
 export default function Header() {
   const [isLoginConfirmModalOpen, setIsLoginConfirmModalOpen] = useState(false);
   const [isSignupConfirmModalOpen, setIsSignupConfirmModalOpen] =
@@ -115,10 +69,15 @@ export default function Header() {
 
   const user = useSelector((state) => state.user);
 
-  // useEffect(() => {}, [user]);
-
-  console.log("user: ", user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+
+    if (userData) {
+      dispatch(login(userData));
+    }
+  }, []);
 
   const headerMobileMenuRef = useRef(null);
 
@@ -195,8 +154,10 @@ export default function Header() {
 
         if (success) {
           setIsClientLoginModalOpen(false);
-          localStorage.setItem("userType", "client");
-          localStorage.setItem("isLoggedIn", true);
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ type: "client", data })
+          );
           dispatch(login({ type: "client", data }));
         }
       })
@@ -251,8 +212,7 @@ export default function Header() {
       label: (
         <span
           onClick={() => {
-            localStorage.removeItem("userType");
-            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("user");
             dispatch(logout());
           }}
         >
@@ -329,8 +289,8 @@ export default function Header() {
                         shape="square"
                         icon={
                           <Image
-                            src={user?.data.agencyLogo}
-                            alt={user?.data.agencyName}
+                            src={user?.data?.agencyLogo}
+                            alt={user?.data?.agencyName}
                             width={200}
                             height={200}
                           />

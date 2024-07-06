@@ -23,8 +23,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-highlight-words": "^0.20.0",
-    "react-redux": "^9.1.2",
-    "redux-persist": "^6.0.0"
+    "react-redux": "^9.1.2"
   },
   "devDependencies": {
     "node-sass": "^9.0.0",
