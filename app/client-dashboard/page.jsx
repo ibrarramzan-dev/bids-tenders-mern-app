@@ -21,15 +21,15 @@ const dashboardMenu = [
 export default function ClientDashboard() {
   const [showSpin, setShowSpin] = useState(true);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setShowSpin(false);
-    }, 5000); // 5 seconds
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     setShowSpin(false);
+  //   }, 5000); // 5 seconds
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  //   return () => {
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, []);
 
   const { user } = useSelector((state) => state);
 
@@ -56,7 +56,7 @@ export default function ClientDashboard() {
 
   return (
     <div>
-      {showSpin && <FullScreenLoader />}
+      {/* {showSpin && <FullScreenLoader />} */}
       <DashboardLayout
         dashboardMenu={dashboardMenu}
         activeMenuItem={activeMenuItem}

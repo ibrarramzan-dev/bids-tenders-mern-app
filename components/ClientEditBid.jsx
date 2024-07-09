@@ -5,30 +5,54 @@ import regions from "@/utils/regions";
 import { CldUploadWidget } from "next-cloudinary";
 const { useForm } = Form;
 const { TextArea } = Input;
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CheckOutlined } from "@ant-design/icons";
+import moment from "moment";
+import Datetime from "react-datetime";
+import "react-datetime/css/react-datetime.css";
+import Link from "next/link";
+import classNames from "classnames";
 
 export default function ClientEditBid({ bid }) {
-  console.log("Active edit bid: ", bid);
-
+  const [attachmentDocs, setAttachmentDocs] = useState([]);
+  const [isUploadBtnDisabled, setIsUploadBtnDisabled] = useState(true);
+  const [editBidFormValues, setEditBidFormValues] = useState();
   const [editBidForm] = useForm();
 
   useEffect(() => {
     editBidForm.setFieldsValue({
       classification: bid.classification,
+      title: bid.title,
+      type: bid.type,
+      region: bid.region,
+      city: bid.city,
+      submissionClosingDate: moment(bid.submissionClosingDate),
+      description: bid.description,
+      // attachments: bid.attachments,
+      submissionLinkOrEmail: bid.submissionLinkOrEmail,
     });
   }, []);
 
   const onUpdateBid = (values) => {
+    values.submissionClosingDate = values.submissionClosingDate.format(
+      "YYYY-MM-DDTHH:mm:ss.sssZ"
+    );
     console.log("onUpdateBid: ", values);
   };
+
+  const onResetAttachments = () => {
+    setIsUploadBtnDisabled(false);
+    editBidForm.setFieldValue("attachmentDocs", []);
+  };
+
+  console.log("Attachment docs: ", attachmentDocs);
 
   return (
     <div>
       <Form
         form={editBidForm}
         onFinish={onUpdateBid}
-        // onValuesChange={(values) => setClientPostABidFormValues(values)}
+        onValuesChange={(values) => setEditBidFormValues(values)}
       >
         <Form.Item
           label="Bid Classification"
@@ -127,7 +151,7 @@ export default function ClientEditBid({ bid }) {
             },
           ]}
         >
-          <DatePicker
+          {/* <DatePicker
             showTime
             showSecond={false}
             onChange={(value, dateString) => {
@@ -135,6 +159,19 @@ export default function ClientEditBid({ bid }) {
               console.log("Formatted Selected Time: ", dateString);
             }}
             onOk={(value) => console.log("onOk of DatePicker: ", value)}
+            value={moment(bid.submissionClosingDate)}
+          /> */}
+          <Datetime
+            // value={bid.submissionClosingDate}
+            onChange={(newDate) => {
+              editBidForm.setFieldValue("submissionClosingDate", newDate);
+            }}
+            // dateFormat="YYYY-MM-DD"
+            // timeFormat="HH:mm:ss"
+            // onChange={(value) => {
+            //   console.log(value);
+            //   editBidForm.setFieldValue("submissionClosingDate", value);
+            // }}
           />
         </Form.Item>
 
@@ -163,6 +200,17 @@ export default function ClientEditBid({ bid }) {
           name="attachments"
           labelCol={{ span: 24 }}
         >
+          <div>
+            <p
+              onClick={() => onResetAttachments()}
+              style={{ cursor: "pointer", display: "inline-block" }}
+              className={classNames({
+                "ClientEditBid-form-reset-clicked": !isUploadBtnDisabled,
+              })}
+            >
+              Reset docs
+            </p>
+          </div>
           <CldUploadWidget
             cloudName={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}
             uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_PRESET_NAME}
@@ -200,6 +248,7 @@ export default function ClientEditBid({ bid }) {
                     open();
                   }}
                   className="Header-signup-modal-form-upload-btn"
+                  disabled={isUploadBtnDisabled}
                 >
                   Upload documents
                 </button>
