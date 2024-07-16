@@ -36,5 +36,5 @@ export async function GET() {
 
   const suppliers = await Supplier.find();
 
-  return NextResponse.json({ suppliers });
+  return NextResponse.json(suppliers);
 }

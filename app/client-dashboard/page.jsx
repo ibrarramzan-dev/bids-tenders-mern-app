@@ -9,6 +9,7 @@ import ClientPostABid from "@/components/ClientPostABid";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import FullScreenLoader from "@/components/FullScreenLoader";
+import ClientSuppliersList from "@/components/ClientSuppliersList";
 
 const dashboardMenu = [
   "Published bids",
@@ -69,8 +70,8 @@ export default function ClientDashboard() {
         {activeMenuItem === "Reports" ? <ClientReports /> : null}
         {activeMenuItem === "Evaluation panels" ? (
           <ClientEvaluationPanels />
-        ) : null}
-        {activeMenuItem === "Suppliers list" ? <ClientSuppliersList /> : null} */}
+        ) : null}*/}
+          {activeMenuItem === "Suppliers list" ? <ClientSuppliersList /> : null}
         </div>
       </DashboardLayout>
     </div>
