@@ -40,6 +40,7 @@ export default function ViewBid({ bid }) {
           <Link
             href={attachment}
             style={{ marginRight: "0.4rem", fontSize: "0.98rem" }}
+            target="_blank"
           >
             <FileTextOutlined />
           </Link>
