@@ -12,17 +12,20 @@ import {
   DatePicker,
   Checkbox,
   Select,
+  notification,
 } from "antd";
 import { CheckOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { bidsFormatTimeForTable } from "@/utils/helpers";
+import { formatTimeForTable } from "@/utils/helpers";
 import ClientEditBid from "./ClientEditBid";
+import ViewBid from "./ViewBid";
 
 export default function ClientPublishedBids() {
   const [bids, setBids] = useState([]);
   const [activeEditBid, setActiveEditBid] = useState({});
+  const [activeViewBid, setActiveViewBid] = useState({});
   const [searchedColumn, setSearchedColumn] = useState("");
   const [searchText, setSearchText] = useState("");
   const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
@@ -37,7 +40,7 @@ export default function ClientPublishedBids() {
         .then((res) => {
           const bids = res.data;
 
-          const _bids = bidsFormatTimeForTable(bids);
+          const _bids = formatTimeForTable(bids);
           setBids(_bids);
         })
         .catch((err) => console.log("Error: ", err));
@@ -45,6 +48,32 @@ export default function ClientPublishedBids() {
   }, [user]);
 
   const searchInput = useRef(null);
+
+  const onDeleteBid = (id, title) => {
+    axios
+      .delete(`/api/bids?id=${id}`)
+      .then((res) => {
+        const { success } = res.data;
+
+        if (success) {
+          notification.success({
+            message: "Success",
+            description: `Bid ${title} has been deleted`,
+          });
+
+          axios
+            .get(`/api/bids/client-published/${user.data._id}`)
+            .then((res) => {
+              const bids = res.data;
+
+              const _bids = formatTimeForTable(bids);
+              setBids(_bids);
+            })
+            .catch((err) => console.log("Error: ", err));
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
 
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
@@ -222,15 +251,18 @@ export default function ClientPublishedBids() {
               <span className="ClientDashboard-action-cell-texts-item-separator-dot">
                 .
               </span>
-              <span className="ClientDashboard-action-cell-texts-item">
+              <span
+                onClick={() => onDeleteBid(record._id, record.title)}
+                className="ClientDashboard-action-cell-texts-item"
+              >
                 Delete
               </span>
             </p>
-            <p>
+            {/* <p>
               <span className="ClientDashboard-action-cell-texts-item">
                 Upload file
               </span>
-            </p>
+            </p> */}
           </div>
         );
       },
@@ -241,7 +273,10 @@ export default function ClientPublishedBids() {
       render: (text, record) => {
         return (
           <p
-            onClick={() => setIsViewBidModalOpen(true)}
+            onClick={() => {
+              setIsViewBidModalOpen(true);
+              setActiveViewBid(record);
+            }}
             className="table-view-text"
           >
             View
@@ -250,6 +285,19 @@ export default function ClientPublishedBids() {
       },
     },
   ];
+
+  const onBidUpdated = () => {
+    setIsEditBidModalOpen(false);
+    axios
+      .get(`/api/bids/client-published/${user.data._id}`)
+      .then((res) => {
+        const bids = res.data;
+
+        const _bids = formatTimeForTable(bids);
+        setBids(_bids);
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
 
   return (
     <div>
@@ -268,7 +316,7 @@ export default function ClientPublishedBids() {
         onCancel={() => setIsEditBidModalOpen(false)}
         footer={false}
       >
-        <ClientEditBid bid={activeEditBid} />
+        <ClientEditBid bid={activeEditBid} onBidUpdated={onBidUpdated} />
       </Modal>
 
       <Modal
@@ -277,7 +325,7 @@ export default function ClientPublishedBids() {
         onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}
       >
-        <p style={{ textAlign: "center" }}>(placeholder)</p>
+        <ViewBid bid={activeViewBid} />
       </Modal>
     </div>
   );

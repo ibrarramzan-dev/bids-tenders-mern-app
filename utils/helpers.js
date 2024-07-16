@@ -1,4 +1,6 @@
-export const bidsFormatTimeForTable = (bids) => {
+import bidTypes from "./bidTypes";
+
+export const formatTimeForTable = (bids) => {
   return bids.map((bid) => {
     const publishedDate = bid.createdAt.split("T")[0];
     const submissionClosingDateArr = bid.submissionClosingDate.split("T");
@@ -12,4 +14,8 @@ export const bidsFormatTimeForTable = (bids) => {
 
     return bid;
   });
+};
+
+export const mapBidTypeToFullForm = (type) => {
+  return bidTypes.find((obj) => obj.value).label;
 };

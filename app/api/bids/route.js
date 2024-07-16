@@ -4,45 +4,13 @@ import { message } from "antd";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-  const {
-    clientId,
-    classification,
-    agencyName,
-    agencyLogo,
-    title,
-    type,
-    region,
-    city,
-    submissionClosingDate,
-    description,
-    status,
-    attachments,
-    submissionLinkOrEmail,
-    featured,
-    eTendering,
-    members,
-  } = await request.json();
+  const payload = await request.json();
+
+  console.log("Payload: ", payload);
 
   await connectMongoDB();
 
-  await Bid.create({
-    clientId,
-    classification,
-    agencyName,
-    agencyLogo,
-    title,
-    type,
-    region,
-    city,
-    submissionClosingDate,
-    description,
-    status,
-    attachments,
-    submissionLinkOrEmail,
-    featured,
-    eTendering,
-    members,
-  });
+  await Bid.create(payload);
 
   return NextResponse.json(
     { message: "Bid created", success: true },
@@ -63,5 +31,8 @@ export async function DELETE(request) {
   await connectMongoDB();
   await Bid.findByIdAndDelete(id);
 
-  return NextResponse.json({ message: "Bid deleted" }, { status: 200 });
+  return NextResponse.json(
+    { message: "Bid deleted", success: true },
+    { status: 200 }
+  );
 }

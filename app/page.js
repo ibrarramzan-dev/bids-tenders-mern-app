@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { loadBids } from "./AppState/Features/bids/bidsSlice";
 import { useEffect } from "react";
 import axios from "axios";
-import { bidsFormatTimeForTable } from "@/utils/helpers";
+import { formatTimeForTable } from "@/utils/helpers";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ export default function Home() {
       .then((res) => {
         const bids = res.data;
 
-        const _bids = bidsFormatTimeForTable(bids);
+        const _bids = formatTimeForTable(bids);
         dispatch(loadBids(_bids));
       })
       .catch((err) => console.log("Error: ", err));

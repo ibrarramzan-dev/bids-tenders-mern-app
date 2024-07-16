@@ -12,6 +12,7 @@ import FeaturedTenders from "./FeaturedTenders";
 import data from "@/utils/bidsData";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import ViewBid from "./ViewBid";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["500"] });
 
@@ -19,8 +20,10 @@ export default function BidsListHome() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
-  const searchInput = useRef(null);
+  const [activeViewBid, setActiveViewBid] = useState({});
   const bids = useSelector((state) => state.bids);
+
+  const searchInput = useRef(null);
 
   const onChange = (value) => {
     console.log(`selected ${value}`);
@@ -190,7 +193,10 @@ export default function BidsListHome() {
       render: (text, record) => {
         return (
           <p
-            onClick={() => setIsViewBidModalOpen(true)}
+            onClick={() => {
+              setIsViewBidModalOpen(true);
+              setActiveViewBid(record);
+            }}
             className="table-view-text"
           >
             View
@@ -271,7 +277,7 @@ export default function BidsListHome() {
         onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}
       >
-        <p style={{ textAlign: "center" }}>(placeholder)</p>
+        <ViewBid bid={activeViewBid} />
       </Modal>
     </section>
   );

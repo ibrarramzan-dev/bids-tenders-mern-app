@@ -1,4 +1,12 @@
-import { Form, Select, Input, DatePicker, Button } from "antd";
+import {
+  Form,
+  Select,
+  Input,
+  DatePicker,
+  Button,
+  Checkbox,
+  notification,
+} from "antd";
 import bidClassification from "@/utils/bidClassification";
 import bidTypes from "@/utils/bidTypes";
 import regions from "@/utils/regions";
@@ -6,17 +14,26 @@ import { CldUploadWidget } from "next-cloudinary";
 const { useForm } = Form;
 const { TextArea } = Input;
 import React, { useEffect, useState } from "react";
-import { CheckOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  FileTextOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import Link from "next/link";
 import classNames from "classnames";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
-export default function ClientEditBid({ bid }) {
+export default function ClientEditBid({ bid, onBidUpdated }) {
+  const [bidAttachedDocs, setBidAttachedDocs] = useState(bid.attachments);
   const [attachmentDocs, setAttachmentDocs] = useState([]);
   const [isUploadBtnDisabled, setIsUploadBtnDisabled] = useState(true);
+  const [members, setMembers] = useState([{ name: "", email: "" }]);
   const [editBidFormValues, setEditBidFormValues] = useState();
+  const { subscription } = useSelector((state) => state.user.data);
   const [editBidForm] = useForm();
 
   useEffect(() => {
@@ -33,19 +50,72 @@ export default function ClientEditBid({ bid }) {
     });
   }, []);
 
-  const onUpdateBid = (values) => {
-    values.submissionClosingDate = values.submissionClosingDate.format(
-      "YYYY-MM-DDTHH:mm:ss.sssZ"
-    );
-    console.log("onUpdateBid: ", values);
+  const handleAddMember = () => {
+    setMembers([...members, { name: "", email: "" }]);
+  };
+
+  const handleInputChange = (index, event) => {
+    const { name, value } = event.target;
+    const newMembers = [...members];
+    newMembers[index][name] = value;
+    setMembers(newMembers);
   };
 
   const onResetAttachments = () => {
+    setBidAttachedDocs([]);
     setIsUploadBtnDisabled(false);
-    editBidForm.setFieldValue("attachmentDocs", []);
   };
 
-  console.log("Attachment docs: ", attachmentDocs);
+  const onUpdateBid = (values) => {
+    if (editBidForm.getFieldValue("eTendering")) {
+      values.members = members;
+    } else {
+      values.members = [];
+    }
+
+    values.submissionClosingDate = values.submissionClosingDate.format(
+      "YYYY-MM-DDTHH:mm:ss.sssZ"
+    );
+
+    if (!isUploadBtnDisabled && attachmentDocs.length === 0) {
+      values.attachments = [];
+    } else if (!isUploadBtnDisabled && attachmentDocs.length > 0) {
+      values.attachments = attachmentDocs;
+    } else {
+      delete values.attachments;
+    }
+
+    if (values.featured === undefined) {
+      values.featured = false;
+    }
+
+    if (values.eTendering === undefined) {
+      values.eTendering = false;
+    }
+
+    axios
+      .put(`/api/bids/${bid._id}`, values)
+      .then((res) => {
+        const { success } = res.data;
+
+        if (success) {
+          notification.success({
+            message: "Success",
+            description: `Bid ${editBidForm.getFieldValue(
+              "title"
+            )} has been updated`,
+          });
+
+          // editBidForm.resetFields();
+          setAttachmentDocs([]);
+          setMembers([]);
+          onBidUpdated();
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
+
+    console.log("onUpdateBid: ", values);
+  };
 
   return (
     <div>
@@ -151,27 +221,10 @@ export default function ClientEditBid({ bid }) {
             },
           ]}
         >
-          {/* <DatePicker
-            showTime
-            showSecond={false}
-            onChange={(value, dateString) => {
-              console.log("Selected Time: ", value);
-              console.log("Formatted Selected Time: ", dateString);
-            }}
-            onOk={(value) => console.log("onOk of DatePicker: ", value)}
-            value={moment(bid.submissionClosingDate)}
-          /> */}
           <Datetime
-            // value={bid.submissionClosingDate}
             onChange={(newDate) => {
               editBidForm.setFieldValue("submissionClosingDate", newDate);
             }}
-            // dateFormat="YYYY-MM-DD"
-            // timeFormat="HH:mm:ss"
-            // onChange={(value) => {
-            //   console.log(value);
-            //   editBidForm.setFieldValue("submissionClosingDate", value);
-            // }}
           />
         </Form.Item>
 
@@ -201,6 +254,16 @@ export default function ClientEditBid({ bid }) {
           labelCol={{ span: 24 }}
         >
           <div>
+            <div>
+              {bidAttachedDocs.map((attachment) => (
+                <Link href={attachment} key={attachment}>
+                  <FileTextOutlined
+                    style={{ fontSize: "1.3rem", marginRight: "0.6rem" }}
+                    size="large"
+                  />
+                </Link>
+              ))}
+            </div>
             <p
               onClick={() => onResetAttachments()}
               style={{ cursor: "pointer", display: "inline-block" }}
@@ -280,86 +343,85 @@ export default function ClientEditBid({ bid }) {
         </Form.Item>
 
         {/* Premium users */}
-        {/* {subscription === "Premium" ? (
-            <Form.Item name="featured" labelCol={{ span: 24 }}>
-              <Checkbox
-                onChange={(e) =>
-                  console.log(`Featured checked = ${e.target.checked}`)
-                }
-              >
-                Do you want to feature this bid?
-              </Checkbox>
-            </Form.Item>
-          ) : null} */}
+        {subscription === "Premium" ? (
+          <Form.Item name="featured" labelCol={{ span: 24 }}>
+            <Checkbox
+              onChange={(e) =>
+                console.log(`Featured checked = ${e.target.checked}`)
+              }
+            >
+              Do you want to feature this bid?
+            </Checkbox>
+          </Form.Item>
+        ) : null}
 
         {/* Paid plans */}
-        {/* {subscription === "Standard" || subscription === "Premium" ? (
-            <Form.Item name="eTendering" labelCol={{ span: 24 }}>
-              <Checkbox
-                onChange={(e) => {
-                  console.log(`eTendering checked = ${e.target.checked}`);
-                  clientPostABidForm.setFieldValue(
-                    "eTendering",
-                    e.target.checked
-                  );
-                }}
-              >
-                eTendering
-              </Checkbox>
-            </Form.Item>
-          ) : null} */}
+        {subscription === "Standard" || subscription === "Premium" ? (
+          <Form.Item name="eTendering" labelCol={{ span: 24 }}>
+            <Checkbox
+              onChange={(e) => {
+                console.log(`eTendering checked = ${e.target.checked}`);
+                editBidForm.setFieldValue("eTendering", e.target.checked);
+              }}
+            >
+              eTendering
+            </Checkbox>
+          </Form.Item>
+        ) : null}
 
-        {/* {editBidForm.getFieldValue("eTendering") ? (
-            <div>
-              {members.map((member, index) => (
-                <div key={index} style={{ marginBottom: "0.1rem" }}>
-                  <div className="ClientPostABid-form-member-fields-wrapper">
-                    <p className="ClientPostABid-form-member-input-label">
-                      Member {index + 1} Name:
-                    </p>
+        {editBidForm.getFieldValue("eTendering") ? (
+          <div>
+            {members.map((member, index) => (
+              <div key={index} style={{ marginBottom: "0.1rem" }}>
+                <div className="ClientPostABid-form-member-fields-wrapper">
+                  <p className="ClientPostABid-form-member-input-label">
+                    Member {index + 1} Name:
+                  </p>
 
-                    <input
-                      type="text"
-                      name="name"
-                      value={member.name}
-                      onChange={(event) => handleInputChange(index, event)}
-                      className="ClientPostABid-form-member-input"
-                    />
-                  </div>
-
-                  <div className="ClientPostABid-form-member-fields-wrapper">
-                    <p className="ClientPostABid-form-member-input-label">
-                      Member {index + 1} Email:
-                    </p>
-
-                    <input
-                      type="email"
-                      name="email"
-                      value={member.email}
-                      onChange={(event) => handleInputChange(index, event)}
-                      className="ClientPostABid-form-member-input"
-                    />
-                  </div>
-                  <br />
+                  <input
+                    type="text"
+                    name="name"
+                    value={member.name}
+                    onChange={(event) => handleInputChange(index, event)}
+                    className="ClientPostABid-form-member-input"
+                    required
+                  />
                 </div>
-              ))}
 
-              <div
-                onClick={handleAddMember}
-                style={{
-                  cursor: "pointer",
-                  marginTop: "-0.85rem",
-                  marginBottom: "1.15rem",
-                }}
-              >
-                <PlusOutlined /> Add more committee members
+                <div className="ClientPostABid-form-member-fields-wrapper">
+                  <p className="ClientPostABid-form-member-input-label">
+                    Member {index + 1} Email:
+                  </p>
+
+                  <input
+                    type="email"
+                    name="email"
+                    value={member.email}
+                    onChange={(event) => handleInputChange(index, event)}
+                    className="ClientPostABid-form-member-input"
+                    required
+                  />
+                </div>
+                <br />
               </div>
+            ))}
+
+            <div
+              onClick={handleAddMember}
+              style={{
+                cursor: "pointer",
+                marginTop: "-0.85rem",
+                marginBottom: "1.15rem",
+              }}
+            >
+              <PlusOutlined /> Add more committee members
             </div>
-          ) : null}
- */}
+          </div>
+        ) : null}
+
         <Form.Item>
           <Button type="primary" htmlType="submit" className="submit-btn">
-            Publish Bid
+            Update Bid
           </Button>
         </Form.Item>
       </Form>

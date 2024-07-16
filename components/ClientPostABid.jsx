@@ -21,15 +21,17 @@ const { TextArea } = Input;
 export default function ClientPostABid() {
   const [attachmentDocs, setAttachmentDocs] = useState([]);
   const [members, setMembers] = useState([{ name: "", email: "" }]);
-  const [clientPostABidFormValues, setClientPostABidFormValues] = useState();
-  const [clientPostABidForm] = useForm();
+  const [postBidFormValues, setPostBidFormValues] = useState();
+  const [postBidForm] = useForm();
   const { agencyName, agencyLogo, _id, subscription } = useSelector(
     (state) => state.user.data
   );
 
   const onPostBid = (values) => {
-    if (clientPostABidForm.getFieldValue("eTendering")) {
+    if (postBidForm.getFieldValue("eTendering")) {
       values.members = members;
+    } else {
+      values.members = [];
     }
 
     values.agencyName = agencyName;
@@ -57,19 +59,17 @@ export default function ClientPostABid() {
         if (success) {
           notification.success({
             message: "Success",
-            description: `Bid ${clientPostABidForm.getFieldValue(
+            description: `Bid ${postBidForm.getFieldValue(
               "title"
             )} has been published`,
           });
 
-          clientPostABidForm.resetFields();
+          postBidForm.resetFields();
           setAttachmentDocs([]);
           setMembers([]);
         }
       })
       .catch((err) => console.log("Error: ", err));
-
-    console.log(values);
   };
 
   const handleAddMember = () => {
@@ -90,9 +90,9 @@ export default function ClientPostABid() {
       <p className="dashboard-heading">Post a bid</p>
 
       <Form
-        form={clientPostABidForm}
+        form={postBidForm}
         onFinish={onPostBid}
-        onValuesChange={(values) => setClientPostABidFormValues(values)}
+        onValuesChange={(values) => setPostBidFormValues(values)}
       >
         <Form.Item
           label="Bid Classification"
@@ -246,7 +246,7 @@ export default function ClientPostABid() {
 
               attachmentDocs.push(result.info.secure_url);
 
-              clientPostABidForm.setFields([
+              postBidForm.setFields([
                 {
                   name: "attachments",
                   value: result.info.secure_url,
@@ -269,7 +269,7 @@ export default function ClientPostABid() {
                 </button>
 
                 <p>
-                  {clientPostABidForm.getFieldValue("attachments") ? (
+                  {postBidForm.getFieldValue("attachments") ? (
                     <CheckOutlined style={{ color: "green" }} />
                   ) : (
                     ""
@@ -298,9 +298,10 @@ export default function ClientPostABid() {
         {subscription === "Premium" ? (
           <Form.Item name="featured" labelCol={{ span: 24 }}>
             <Checkbox
-              onChange={(e) =>
-                console.log(`Featured checked = ${e.target.checked}`)
-              }
+              onChange={(e) => {
+                console.log(`Featured checked = ${e.target.checked}`);
+                postBidForm.setFieldValue("featured", e.target.checked);
+              }}
             >
               Do you want to feature this bid?
             </Checkbox>
@@ -313,10 +314,7 @@ export default function ClientPostABid() {
             <Checkbox
               onChange={(e) => {
                 console.log(`eTendering checked = ${e.target.checked}`);
-                clientPostABidForm.setFieldValue(
-                  "eTendering",
-                  e.target.checked
-                );
+                postBidForm.setFieldValue("eTendering", e.target.checked);
               }}
             >
               eTendering
@@ -324,7 +322,7 @@ export default function ClientPostABid() {
           </Form.Item>
         ) : null}
 
-        {clientPostABidForm.getFieldValue("eTendering") ? (
+        {postBidForm.getFieldValue("eTendering") ? (
           <div>
             {members.map((member, index) => (
               <div key={index} style={{ marginBottom: "0.1rem" }}>

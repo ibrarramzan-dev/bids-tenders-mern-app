@@ -1,35 +1,35 @@
 const bidTypes = [
   {
     value: "ITB",
-    label: "ITB - Invitation to Bid RFQ –",
+    label: "Invitation to Bid -",
   },
   {
     value: "RFQ",
-    label: "RFQ - Request for Quotation",
+    label: "Request for Quotation -",
   },
   {
     value: "EOI",
-    label: "EOI - Expression of Interest",
+    label: "Expression of Interest -",
   },
   {
     value: "RFP",
-    label: "RFP - Request for Proposal",
+    label: "Request for Proposal -",
   },
   {
     value: "CFP",
-    label: "CFP - Call for Proposal",
+    label: "Call for Proposal -",
   },
   {
     value: "IC",
-    label: "IC - Invitation to Collaborate",
+    label: "Invitation to Collaborate -",
   },
   {
     value: "RFB",
-    label: "RFB - Request for Bid",
+    label: "Request for Bid -",
   },
   {
     value: "RFI",
-    label: "RFI - Request for Information",
+    label: "Request for Information -",
   },
 ];
 

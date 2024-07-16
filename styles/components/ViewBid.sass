@@ -1,0 +1,59 @@
+@import '../theme/colors'
+  
+.ViewBid
+  .ViewBid-title-and-status-wrapper
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+  .ViewBid-title
+    font-size: 1.2rem
+    font-weight: bold
+
+  .ViewBid-status
+    height: 1.5rem
+    background: green
+    // color: 
+      // font-size: 1.2rem
+    font-weight: bold
+
+  .ViewBid-description
+    border-left: 3px solid $separator-grey
+    padding-left: 1rem
+    margin-top: 0.6rem
+    margin-bottom: 1.6rem
+
+  .ViewBid-attachments
+    .ViewBid-attachments-label
+      color: $text-grey
+      font-weight: bold
+
+  .ViewBid-info-columns-wrapper
+    display: flex
+    justify-content: space-between
+
+    .ViewBid-info-column-2
+      text-align: right
+
+      .ViewBid-info-column-2-agency-info
+        display: flex
+        border: 2px solid $border-grey
+        padding: 0.6rem 1rem
+        border-radius: 6px
+        column-gap: 0.2rem
+
+      .ViewBid-info-column-2-location
+        display: flex
+        justify-content: right
+        column-gap: 0.2rem
+        margin-top: 0.4rem
+        font-weight: bold
+
+  .ViewBid-field-heading
+    font-size: 1rem
+    color: $primary-color
+    font-weight: bold
+    margin-top: 1rem
+
+  .ViewBid-field-heading-closing-date
+    color: $danger

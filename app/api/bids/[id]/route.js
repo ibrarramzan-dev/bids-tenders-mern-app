@@ -11,3 +11,16 @@ export async function GET(request, { params }) {
 
   return NextResponse.json({ bid }, { status: 200 });
 }
+
+export async function PUT(request, { params }) {
+  const { id } = params;
+  const payload = await request.json();
+
+  await connectMongoDB();
+  await Bid.findByIdAndUpdate(id, payload);
+
+  return NextResponse.json(
+    { message: "Bid updated", success: true },
+    { status: 200 }
+  );
+}
