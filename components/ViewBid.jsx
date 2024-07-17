@@ -1,7 +1,7 @@
 import { Tag } from "antd";
 import React from "react";
 import Image from "next/image";
-import { mapBidTypeToFullForm } from "@/utils/helpers";
+import { isBidClosed, mapBidTypeToFullForm } from "@/utils/helpers";
 import pin from "@/public/images/pin.png";
 import Link from "next/link";
 import { FileTextOutlined } from "@ant-design/icons";
@@ -27,8 +27,12 @@ export default function ViewBid({ bid }) {
     <div className="ViewBid">
       <p className="ViewBid-title-and-status-wrapper">
         <p className="ViewBid-title">{title}</p>
-        <Tag color="green" bordered={false} className="ViewBid-status">
-          {status}
+        <Tag
+          color={`${isBidClosed(bid.submissionClosingDate) ? "red" : "green"}`}
+          bordered={false}
+          className="ViewBid-status"
+        >
+          {isBidClosed(bid.submissionClosingDate) ? "Closed" : "Open"}
         </Tag>
       </p>
 

@@ -19,3 +19,13 @@ export const formatTimeForTable = (bids) => {
 export const mapBidTypeToFullForm = (type) => {
   return bidTypes.find((obj) => obj.value).label;
 };
+
+export const isBidClosed = (closingDate) => {
+  const [date, time] = closingDate.split(" ");
+  const [year, month, day] = date.split("-");
+  const [hour, minute] = time.split(":");
+
+  const closingDateObj = new Date(year, month - 1, day, hour, minute);
+
+  return new Date() > closingDateObj;
+};

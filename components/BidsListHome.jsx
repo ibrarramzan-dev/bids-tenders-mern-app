@@ -13,6 +13,7 @@ import data from "@/utils/bidsData";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import ViewBid from "./ViewBid";
+import { isBidClosed } from "@/utils/helpers";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["500"] });
 
@@ -160,7 +161,14 @@ export default function BidsListHome() {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      ...getColumnSearchProps("status"),
+      // ...getColumnSearchProps("status"),
+      render: (text, record) => {
+        return (
+          <div>
+            {isBidClosed(record.submissionClosingDate) ? "Closed" : "Open"}
+          </div>
+        );
+      },
     },
     {
       title: "Published date",
