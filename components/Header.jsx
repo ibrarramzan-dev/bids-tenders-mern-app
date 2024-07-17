@@ -321,17 +321,81 @@ export default function Header() {
               <input placeholder="Search bids or tender" />
             </div>
 
-            <Link href="/supplier-login">
-              <p>Supplier login</p>
-            </Link>
-
-            <Link href="/client-login">
-              <p>Client login</p>
-            </Link>
-
-            <div>
-              <button onClick={onMobileMenuSignupConfirmOpen}>Sign Up</button>
+            <div className="Header-mobile-menu-search-button">
+              <Button type="primary">Search</Button>
             </div>
+
+            <ul className={poppins.className}>
+              {user?.type === "guest" ? (
+                <>
+                  {" "}
+                  <li>
+                    <Button
+                      onClick={() => setIsLoginConfirmModalOpen(true)}
+                      type="default"
+                      size="large"
+                    >
+                      Login
+                    </Button>
+                  </li>
+                  <li className="Header-right-sign-up-btn-wrapper">
+                    <Button
+                      onClick={onSignupConfirmModalOpen}
+                      type="primary"
+                      size="large"
+                    >
+                      Sign Up
+                    </Button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <span
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: "500",
+                        marginLeft: "1.72rem",
+                      }}
+                    >
+                      <Link
+                        href={`/${
+                          user?.type === "supplier" ? "supplier" : "client"
+                        }-dashboard`}
+                        title="Dashboard"
+                      >
+                        MANAGE
+                      </Link>
+                    </span>
+                  </li>
+
+                  <li>
+                    <Dropdown
+                      menu={{
+                        items: avatarDropdownItems,
+                      }}
+                      overlayStyle={{ zIndex: "10000" }}
+                    >
+                      <a>
+                        <Badge count={2} style={{ cursor: "default" }} title="">
+                          <Avatar
+                            shape="square"
+                            icon={
+                              <Image
+                                src={user?.data?.agencyLogo}
+                                alt={user?.data?.agencyName}
+                                width={200}
+                                height={200}
+                              />
+                            }
+                          />
+                        </Badge>
+                      </a>
+                    </Dropdown>
+                  </li>
+                </>
+              )}
+            </ul>
           </div>
         </div>
       </div>

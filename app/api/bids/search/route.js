@@ -10,7 +10,18 @@ export async function GET(request) {
   console.log("status: ", status);
 
   await connectMongoDB();
-  const bids = await Bid.find({ status, classification });
+
+  const searchQuery = {};
+
+  if (status) {
+    searchQuery.status = status;
+  }
+
+  if (classification) {
+    searchQuery.classification = classification;
+  }
+
+  const bids = await Bid.find(searchQuery);
 
   return NextResponse.json(bids, { status: 200 });
 }
