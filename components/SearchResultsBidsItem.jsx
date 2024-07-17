@@ -5,9 +5,6 @@ export default function SearchResultsBidsItem({ bid }) {
     <div className="SearchResultsBidsItem">
       <p className="SearchResultsBidsItem-title">{title}</p>
       <p>{description}</p>
-
-      <br />
-      <hr />
     </div>
   );
 }

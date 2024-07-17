@@ -31,6 +31,8 @@ export default function SearchBids() {
 
   return (
     <div>
+      <p className="page-heading">Search Bids</p>
+
       <SearchResultsBids list={searchResults} />
     </div>
   );
