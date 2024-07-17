@@ -22,6 +22,21 @@ export default function SearchResultsBids({ list }) {
         <SearchResultsBidsItem onItemClick={onItemClick} bid={bid} />
       ))}
 
+      {list.length === 0 ? (
+        <p className="no-results-text">
+          <br />
+          <br />
+          <br />
+          <br /> No results
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+        </p>
+      ) : null}
+
       <Modal
         title={<p className="modal-heading">Bid</p>}
         open={isViewBidModalOpen}
