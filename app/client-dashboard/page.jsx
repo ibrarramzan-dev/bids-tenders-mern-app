@@ -20,7 +20,7 @@ const dashboardMenu = [
 ];
 
 export default function ClientDashboard() {
-  const [showSpin, setShowSpin] = useState(true);
+  // const [showSpin, setShowSpin] = useState(true);
 
   // useEffect(() => {
   //   const timeoutId = setTimeout(() => {

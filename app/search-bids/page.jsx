@@ -1,4 +1,5 @@
 "use client";
+import FullScreenLoader from "@/components/FullScreenLoader";
 import SearchResultsBids from "@/components/SearchResultsBids";
 import { formatTimeForTable } from "@/utils/helpers";
 import axios from "axios";
@@ -7,6 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function SearchBids() {
   const [searchResults, setSearchResults] = useState([]);
+  const [showSpin, setShowSpin] = useState(true);
 
   const searchParams = useSearchParams();
 
@@ -22,7 +24,14 @@ export default function SearchBids() {
 
         const _bids = formatTimeForTable(bids);
 
-        setSearchResults(_bids);
+        const filteredBids = _bids.filter(
+          (bid) =>
+            bid.title.toLowerCase().includes(keywords.toLowerCase()) ||
+            bid.description.toLowerCase().includes(keywords.toLowerCase())
+        );
+
+        setSearchResults(filteredBids);
+        setShowSpin(false);
       })
       .catch((err) => console.log("Error: ", err));
   }, []);
@@ -31,6 +40,7 @@ export default function SearchBids() {
 
   return (
     <div>
+      {showSpin && <FullScreenLoader />}
       <p className="page-heading">Search Bids</p>
 
       <SearchResultsBids list={searchResults} />
