@@ -208,57 +208,6 @@ export default function BidsListHome() {
 
   return (
     <section className={`BidsListHome ${montserrat.className}`}>
-      <hr
-        style={{
-          width: "85%",
-        }}
-      />
-
-      <p className={`BidsListHome-heading ${montserrat.className}`}>
-        Latest bids
-      </p>
-
-      <div className="BidsListHome-actions-wrapper">
-        <div className="BidsListHome-actions-input">
-          <Input placeholder="Enter keywords" style={{ height: "3rem" }} />
-        </div>
-
-        <div className="BidsListHome-actions-select-status">
-          <Select
-            showSearch
-            placeholder="Status"
-            optionFilterProp="children"
-            onChange={onChange}
-            onSearch={onSearch}
-            filterOption={filterOption}
-            options={bidStatuses}
-            style={{ width: "100%", height: "3rem" }}
-          />
-        </div>
-
-        <div className="BidsListHome-actions-select-classification">
-          <Select
-            showSearch
-            placeholder="Classification"
-            optionFilterProp="children"
-            onChange={onChange}
-            onSearch={onSearch}
-            filterOption={filterOption}
-            options={bidClassification}
-            style={{ width: "100%", height: "3rem" }}
-          />
-        </div>
-
-        <div className="BidsListHome-actions-search-btn">
-          <Button
-            type="primary"
-            style={{ width: "100%", height: "3rem", fontWeight: "bold" }}
-          >
-            Search
-          </Button>
-        </div>
-      </div>
-
       <FeaturedTenders />
 
       <div className="BidsListHome-table-wrapper">

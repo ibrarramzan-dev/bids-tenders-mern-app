@@ -8,6 +8,7 @@ import { loadBids } from "./AppState/Features/bids/bidsSlice";
 import { useEffect } from "react";
 import axios from "axios";
 import { formatTimeForTable } from "@/utils/helpers";
+import SearchBidsHome from "@/components/SearchBidsHome";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ export default function Home() {
   return (
     <main>
       <HomeBanner />
+      <SearchBidsHome />
       <BidsListHome />
     </main>
   );
