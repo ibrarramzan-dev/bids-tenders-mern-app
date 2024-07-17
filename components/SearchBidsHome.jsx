@@ -3,11 +3,11 @@ import bidStatuses from "@/utils/bidStatuses";
 import { Button, Input, Select } from "antd";
 import { Montserrat } from "next/font/google";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["500"] });
 
-export default function SearchBidsHome() {
+const Search = () => {
   const [searchKeywords, setSearchKeywords] = useState("");
   const [status, setStatus] = useState("");
   const [classification, setClassification] = useState("");
@@ -92,5 +92,13 @@ export default function SearchBidsHome() {
         </div>
       </div>
     </div>
+  );
+};
+
+export default function SearchBidsHome() {
+  return (
+    <Suspense>
+      <Search />
+    </Suspense>
   );
 }

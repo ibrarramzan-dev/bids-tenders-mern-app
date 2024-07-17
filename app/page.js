@@ -1,8 +1,6 @@
 "use client";
-import Header from "@/components/Header";
 import HomeBanner from "@/components/HomeBanner";
 import BidsListHome from "@/components/BidsListHome";
-import Footer from "@/components/Footer";
 import { useDispatch } from "react-redux";
 import { loadBids } from "./AppState/Features/bids/bidsSlice";
 import { useEffect } from "react";
