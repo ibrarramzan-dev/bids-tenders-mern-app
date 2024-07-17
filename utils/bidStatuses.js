@@ -1,34 +1,34 @@
 const bidStatuses = [
   {
-    value: "all",
+    value: "All",
     label: "All",
   },
   {
-    value: "open",
+    value: "Open",
     label: "Open",
   },
   {
-    value: "closed",
+    value: "Closed",
     label: "Closed",
   },
   {
-    value: "cancelled",
+    value: "Cancelled",
     label: "Cancelled",
   },
   {
-    value: "archived",
+    value: "Archived",
     label: "Archived",
   },
   {
-    value: "awarded",
+    value: "Awarded",
     label: "Awarded",
   },
   {
-    value: "planned",
+    value: "Planned",
     label: "Planned",
   },
   {
-    value: "terminated",
+    value: "Terminated",
     label: "Terminated",
   },
 ];

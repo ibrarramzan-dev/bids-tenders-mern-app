@@ -30,7 +30,7 @@ export default function SearchBidsHome() {
       `);
 
     router.push(
-      `/search-bids?query=${searchKeywords}&status=${status}&classification=${classification}`
+      `/search-bids?keywords=${searchKeywords}&status=${status}&classification=${classification}`
     );
   };
 
