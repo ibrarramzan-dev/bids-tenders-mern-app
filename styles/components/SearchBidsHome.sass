@@ -1,3 +1,6 @@
+@import '../theme/colors'
+@import '../theme/text'
+  
 .SearchBidsHome
   .SearchBidsHome-actions-wrapper
     display: flex
@@ -28,3 +31,20 @@
     text-align: center
     margin-top: 2.4rem
     margin-bottom: 1.6rem
+
+@media (max-width: 1120px)
+  .SearchBidsHome-actions-wrapper
+    width: 80% !important
+    display: block !important
+    margin: auto
+
+    div
+      width: 100% !important
+      margin-bottom: 5%
+
+    .SearchBidsHome-actions-select-classification
+      margin-top: -4.5%
+
+    .SearchBidsHome-actions-search-btn
+      margin-top: -4%
+      margin-left: 0 !important
