@@ -320,7 +320,7 @@ export default function ClientPublishedBids() {
       </Modal>
 
       <Modal
-        title={<p className="modal-heading">Bid Insights</p>}
+        // title={<p className="modal-heading">Bid Insights</p>}
         open={isViewBidModalOpen}
         onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}

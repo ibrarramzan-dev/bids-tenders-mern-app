@@ -41,7 +41,7 @@ export default function SearchBids() {
   return (
     <div>
       {showSpin && <FullScreenLoader />}
-      <p className="page-heading">Search Bids</p>
+      <p className="page-heading">Searched Bids</p>
 
       <SearchResultsBids list={searchResults} />
     </div>

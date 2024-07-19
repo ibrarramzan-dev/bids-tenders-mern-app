@@ -270,8 +270,9 @@ export default function Header() {
                       user?.type === "supplier" ? "supplier" : "client"
                     }-dashboard`}
                     title="Dashboard"
+                    className="Header-right-menu-text"
                   >
-                    MANAGE
+                    <b>Dash Board</b>
                   </Link>
                 </span>
               </li>
@@ -364,7 +365,7 @@ export default function Header() {
                         }-dashboard`}
                         title="Dashboard"
                       >
-                        MANAGE
+                        <b>Console</b>
                       </Link>
                     </span>
                   </li>

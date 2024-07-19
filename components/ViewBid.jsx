@@ -76,7 +76,9 @@ export default function ViewBid({ bid }) {
         <div className="ViewBid-info-column-2">
           <div className="ViewBid-info-column-2-agency-info">
             <Image src={agencyLogo} alt={agencyName} width={35} height={35} />
-            <p>{agencyName}</p>
+            <p>
+              <b>{agencyName}</b>
+            </p>
           </div>
 
           <div className="ViewBid-info-column-2-location">

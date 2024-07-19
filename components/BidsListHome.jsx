@@ -229,7 +229,7 @@ export default function BidsListHome() {
       </div>
 
       <Modal
-        title={<p className="modal-heading">Bid</p>}
+        // title={<p className="modal-heading">Bid</p>}
         open={isViewBidModalOpen}
         onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}
