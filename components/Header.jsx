@@ -313,90 +313,31 @@ export default function Header() {
           </div>
 
           <div className="Header-mobile-menu-ul-wrapper">
-            <div className="Header-mobile-menu-search-wrapper">
-              <SearchOutlined
-                title="Search bids or suppliers"
-                className="Header-mobile-menu-search-icon"
-              />
-
-              <input placeholder="Search bids or tender" />
+            <div className="Header-mobile-menu-button">
+              <button
+                onClick={() => {
+                  if (headerMobileMenuRef.current) {
+                    headerMobileMenuRef.current.style.visibility = "hidden";
+                  }
+                  setIsLoginConfirmModalOpen(true);
+                }}
+              >
+                Login
+              </button>
             </div>
 
-            <div className="Header-mobile-menu-search-button">
-              <Button type="primary">Search</Button>
+            <div className="Header-mobile-menu-button">
+              <button
+                onClick={() => {
+                  if (headerMobileMenuRef.current) {
+                    headerMobileMenuRef.current.style.visibility = "hidden";
+                  }
+                  setIsSignupConfirmModalOpen(true);
+                }}
+              >
+                Sign Up
+              </button>
             </div>
-
-            <ul className={poppins.className}>
-              {user?.type === "guest" ? (
-                <>
-                  {" "}
-                  <li>
-                    <Button
-                      onClick={() => setIsLoginConfirmModalOpen(true)}
-                      type="default"
-                      size="large"
-                    >
-                      Login
-                    </Button>
-                  </li>
-                  <li className="Header-right-sign-up-btn-wrapper">
-                    <Button
-                      onClick={onSignupConfirmModalOpen}
-                      type="primary"
-                      size="large"
-                    >
-                      Sign Up
-                    </Button>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <span
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: "500",
-                        marginLeft: "1.72rem",
-                      }}
-                    >
-                      <Link
-                        href={`/${
-                          user?.type === "supplier" ? "supplier" : "client"
-                        }-dashboard`}
-                        title="Dashboard"
-                      >
-                        <b>Console</b>
-                      </Link>
-                    </span>
-                  </li>
-
-                  <li>
-                    <Dropdown
-                      menu={{
-                        items: avatarDropdownItems,
-                      }}
-                      overlayStyle={{ zIndex: "10000" }}
-                    >
-                      <a>
-                        <Badge count={2} style={{ cursor: "default" }} title="">
-                          <Avatar
-                            shape="square"
-                            icon={
-                              <Image
-                                src={user?.data?.agencyLogo}
-                                alt={user?.data?.agencyName}
-                                width={200}
-                                height={200}
-                              />
-                            }
-                          />
-                        </Badge>
-                      </a>
-                    </Dropdown>
-                  </li>
-                </>
-              )}
-            </ul>
           </div>
         </div>
       </div>
