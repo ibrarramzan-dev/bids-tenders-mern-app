@@ -20,6 +20,7 @@ const dashboardMenu = [
 ];
 
 export default function ClientDashboard() {
+  const [activeMenuItem, setActiveMenuItem] = useState(dashboardMenu[0]);
   // const [showSpin, setShowSpin] = useState(true);
 
   // useEffect(() => {
@@ -45,8 +46,6 @@ export default function ClientDashboard() {
       }
     }
   }, [user]);
-
-  const [activeMenuItem, setActiveMenuItem] = useState(dashboardMenu[0]);
 
   const onChange = (value) => {
     console.log(`selected ${value}`);

@@ -1,12 +1,16 @@
-import { Tag } from "antd";
-import React from "react";
+import { Alert, Tag } from "antd";
+import { HeartOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
 import Image from "next/image";
 import { isBidClosed, mapBidTypeToFullForm } from "@/utils/helpers";
 import pin from "@/public/images/pin.png";
 import Link from "next/link";
 import { FileTextOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 export default function ViewBid({ bid }) {
+  const { type: userType } = useSelector((state) => state.user);
+
   const {
     createdAt,
     title,
@@ -23,17 +27,44 @@ export default function ViewBid({ bid }) {
     attachments,
   } = bid;
 
+  const onApply = () => {
+    alert("applied");
+  };
+
+  const onSave = () => {};
+
   return (
     <div className="ViewBid">
       <p className="ViewBid-title-and-status-wrapper">
         <p className="ViewBid-title">{title}</p>
-        <Tag
-          color={`${isBidClosed(bid.submissionClosingDate) ? "red" : "green"}`}
-          bordered={false}
-          className="ViewBid-status"
-        >
-          {isBidClosed(bid.submissionClosingDate) ? "Closed" : "Open"}
-        </Tag>
+
+        <div>
+          <Tag
+            color={`${
+              isBidClosed(bid.submissionClosingDate) ? "red" : "green"
+            }`}
+            bordered={false}
+            className="ViewBid-status-tag"
+          >
+            {isBidClosed(bid.submissionClosingDate) ? "Closed" : "Open"}
+          </Tag>
+
+          {userType === "supplier" &&
+          !isBidClosed(bid.submissionClosingDate) ? (
+            <Tag onClick={onApply} color="blue" className="ViewBid-apply-tag">
+              APPLY <RightOutlined />
+            </Tag>
+          ) : null}
+
+          {userType !== "guest" && !isBidClosed(bid.submissionClosingDate) ? (
+            <HeartOutlined onClick={onSave} style={{ marginRight: "0.2rem" }} />
+          ) : null}
+
+          {!isBidClosed(bid.submissionClosingDate) &&
+          userType !== "supplier" ? (
+            <Alert message="Login as supplier to apply" type="warning" />
+          ) : null}
+        </div>
       </p>
 
       <p className="ViewBid-description">{description}</p>
