@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import SupplierSavedBids from "@/components/SupplierSavedBids";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 
 const dashboardMenu = ["Saved bids", "Info & alerts"];
