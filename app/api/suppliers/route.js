@@ -16,8 +16,8 @@ export async function POST(request) {
   await connectMongoDB();
 
   const newSupplier = await Supplier.create({
-    companyName,
-    companyLogo,
+    agencyName,
+    agencyLogo,
     scopeOfOperation,
     experience,
     email,
