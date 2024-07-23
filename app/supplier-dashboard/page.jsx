@@ -17,7 +17,7 @@ export default function SupplierDashboard() {
     const userType = user.type;
 
     if (userType) {
-      if (userType !== "supplier") {
+      if (userType === "guest" || userType === "client") {
         router.push("/");
       }
     }
