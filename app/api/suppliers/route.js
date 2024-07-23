@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const {
-    companyName,
-    companyLogo,
+    agencyName,
+    agencyLogo,
     scopeOfOperation,
     experience,
     email,
