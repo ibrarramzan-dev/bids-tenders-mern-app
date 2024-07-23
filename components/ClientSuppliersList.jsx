@@ -158,7 +158,7 @@ export default function ClientSuppliersList() {
         return (
           <div className="table-cell-flex-box">
             <Image src={record.agencyLogo} alt={text} width={20} height={20} />
-            <p style={{ textAlign: "center" }}>{text}</p>
+            <p style={{ textAlign: "center" }}>{agencyName}</p>
           </div>
         );
       },
