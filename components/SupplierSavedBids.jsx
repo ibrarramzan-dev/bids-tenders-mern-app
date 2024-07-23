@@ -1,15 +1,32 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Table, Input, Space, Button, Modal } from "antd";
 import Image from "next/image";
 import { SearchOutlined } from "@ant-design/icons";
 import data from "@/utils/bidsData";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { formatTimeForTable, isBidClosed } from "@/utils/helpers";
 
 export default function SupplierSavedBids() {
+  const [bids, setBids] = useState([]);
   const [searchedColumn, setSearchedColumn] = useState("");
   const [isSubmittedBidModalOpen, setIsSubmittedBidModalOpen] = useState(false);
+  const { data } = useSelector((state) => state.user);
   const searchInput = useRef(null);
+
+  useEffect(() => {
+    axios
+      .get(`/api/bids/supplier-saved/${data._id}`)
+      .then((res) => {
+        const bids = res.data;
+
+        const _bids = formatTimeForTable(bids);
+        setBids(_bids);
+      })
+      .catch((err) => console.log("Error: ", err));
+  }, []);
 
   const onChange = (value) => {
     console.log(`selected ${value}`);
@@ -137,16 +154,23 @@ export default function SupplierSavedBids() {
   const columns = [
     {
       title: "Bid name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "title",
+      key: "title",
       fixed: "left",
-      ...getColumnSearchProps("name"),
+      ...getColumnSearchProps("title"),
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      ...getColumnSearchProps("status"),
+      // ...getColumnSearchProps("status"),
+      render: (text, record) => {
+        return (
+          <div>
+            {isBidClosed(record.submissionClosingDate) ? "Closed" : "Open"}
+          </div>
+        );
+      },
     },
     {
       title: "Organization",
@@ -155,19 +179,14 @@ export default function SupplierSavedBids() {
       render: (text, record) => {
         return (
           <div className="table-cell-flex-box">
-            <Image
-              src={record.organizationLogo}
-              alt={text}
-              width={20}
-              height={20}
-            />
-            <p style={{ textAlign: "center" }}>{text}</p>
+            <Image src={record.agencyLogo} alt={text} width={20} height={20} />
+            <p style={{ textAlign: "center" }}>{record.agencyName}</p>
           </div>
         );
       },
     },
     {
-      title: "View Submitted Bid",
+      title: "View",
       key: "view",
       render: (text, record) => {
         return (
@@ -188,7 +207,7 @@ export default function SupplierSavedBids() {
 
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={bids}
         pagination={{ pageSize: 50 }}
         scroll={{ x: 1200, y: 400 }}
       />
