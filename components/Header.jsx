@@ -140,6 +140,10 @@ export default function Header() {
 
         if (success) {
           setIsSupplierLoginModalOpen(false);
+          localStorage.setItem(
+            "user",
+            JSON.stringify({ type: "supplier", data })
+          );
           dispatch(login({ type: "supplier", data }));
         }
       })
