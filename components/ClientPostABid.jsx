@@ -42,6 +42,7 @@ export default function ClientPostABid() {
     values.agencyLogo = agencyLogo;
     values.clientId = _id;
     values.status = "Open";
+    values.savedTo = [];
 
     if (values.featured === undefined) {
       values.featured = false;

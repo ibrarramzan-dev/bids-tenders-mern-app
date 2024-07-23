@@ -1,15 +1,19 @@
+"use client";
+
 import { Alert, Tag } from "antd";
-import { HeartOutlined, RightOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import { HeartFilled, HeartOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { isBidClosed, mapBidTypeToFullForm } from "@/utils/helpers";
 import pin from "@/public/images/pin.png";
 import Link from "next/link";
 import { FileTextOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
-export default function ViewBid({ bid }) {
-  const { type: userType } = useSelector((state) => state.user);
+export default function ViewBid({ bid, onBidSave }) {
+  const [isSaved, setIsSaved] = useState(false);
+  const { type: userType, data } = useSelector((state) => state.user);
 
   const {
     createdAt,
@@ -31,7 +35,31 @@ export default function ViewBid({ bid }) {
     alert("applied");
   };
 
-  const onSave = () => {};
+  const onSave = () => {
+    axios
+      .put(`/api/bids/save/${bid._id}?supplierId=${data._id}`)
+      .then((res) => {
+        const { success } = res.data;
+
+        if (success) {
+          onBidSave(bid.title);
+          setIsSaved(true);
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
+
+  const renderSaved = () => {
+    if (userType !== "guest" && !isBidClosed(bid.submissionClosingDate)) {
+      if (bid.savedTo.find((obj) => obj.supplierId === data._id)) {
+        return <HeartFilled style={{ marginRight: "0.2rem" }} />;
+      } else {
+        return (
+          <HeartOutlined onClick={onSave} style={{ marginRight: "0.2rem" }} />
+        );
+      }
+    }
+  };
 
   return (
     <div className="ViewBid">
@@ -56,9 +84,7 @@ export default function ViewBid({ bid }) {
             </Tag>
           ) : null}
 
-          {userType !== "guest" && !isBidClosed(bid.submissionClosingDate) ? (
-            <HeartOutlined onClick={onSave} style={{ marginRight: "0.2rem" }} />
-          ) : null}
+          {renderSaved()}
 
           {!isBidClosed(bid.submissionClosingDate) &&
           userType !== "supplier" ? (

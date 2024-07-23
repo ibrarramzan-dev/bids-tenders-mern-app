@@ -5,6 +5,10 @@ const membersSchema = new Schema({
   email: String,
 });
 
+const savedToSchema = new Schema({
+  supplierId: String,
+});
+
 const bidSchema = new Schema(
   {
     clientId: String,
@@ -23,6 +27,7 @@ const bidSchema = new Schema(
     featured: Boolean,
     eTendering: Boolean,
     members: [membersSchema],
+    savedTo: [savedToSchema],
   },
   {
     timestamps: true,

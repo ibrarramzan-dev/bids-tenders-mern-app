@@ -2,6 +2,10 @@
 //   const { id } = params;
 //   const payload = await request.json();
 
+import connectMongoDB from "@/libs/mongodb";
+import Bid from "@/models/bid";
+import { NextResponse } from "next/server";
+
 //   await connectMongoDB();
 //   await Bid.findByIdAndUpdate(id, payload);
 
@@ -16,7 +20,6 @@ export async function PUT(request, { params }) {
   const supplierId = request.nextUrl.searchParams.get("supplierId");
 
   await connectMongoDB();
-  await Bid.findByIdAndUpdate(id, {});
 
   await Bid.findOneAndUpdate(
     { _id: id },

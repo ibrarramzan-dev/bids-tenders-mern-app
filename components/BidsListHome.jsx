@@ -4,25 +4,31 @@ import { Montserrat } from "next/font/google";
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Table, Select, Modal } from "antd";
+import { Button, Input, Space, Table, Select, Modal, notification } from "antd";
 import Highlighter from "react-highlight-words";
 import bidStatuses from "@/utils/bidStatuses";
 import bidClassification from "@/utils/bidClassification";
 import FeaturedTenders from "./FeaturedTenders";
 import data from "@/utils/bidsData";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ViewBid from "./ViewBid";
-import { isBidClosed } from "@/utils/helpers";
+import { formatTimeForTable, isBidClosed } from "@/utils/helpers";
+import { loadBids } from "@/app/AppState/Features/bids/bidsSlice";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["500"] });
 
 export default function BidsListHome() {
+  const [isSaved, setIsSaved] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
   const [activeViewBid, setActiveViewBid] = useState({});
   const bids = useSelector((state) => state.bids);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {}, [bids]);
 
   const searchInput = useRef(null);
 
@@ -214,6 +220,24 @@ export default function BidsListHome() {
     },
   ];
 
+  const onBidSave = (title) => {
+    axios
+      .get("/api/bids")
+      .then((res) => {
+        const bids = res.data;
+
+        const _bids = formatTimeForTable(bids);
+        dispatch(loadBids(_bids));
+        notification.success({
+          message: "Success",
+          description: `Bid ${title} has been saved`,
+        });
+
+        setIsViewBidModalOpen(false);
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
+
   return (
     <section className={`BidsListHome ${montserrat.className}`}>
       <FeaturedTenders />
@@ -234,7 +258,7 @@ export default function BidsListHome() {
         onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}
       >
-        <ViewBid bid={activeViewBid} />
+        <ViewBid bid={activeViewBid} onBidSave={onBidSave} />
       </Modal>
     </section>
   );
