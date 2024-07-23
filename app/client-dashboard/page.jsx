@@ -41,7 +41,7 @@ export default function ClientDashboard() {
     const userType = user.type;
 
     if (userType) {
-      if (userType === "guest" || userType === "supplier") {
+      if (userType !== "client") {
         router.push("/");
       }
     }
