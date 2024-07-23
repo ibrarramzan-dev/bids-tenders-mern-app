@@ -8,11 +8,14 @@ import data from "@/utils/bidsData";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { formatTimeForTable, isBidClosed } from "@/utils/helpers";
+import ViewBid from "./ViewBid";
 
 export default function SupplierSavedBids() {
   const [bids, setBids] = useState([]);
+  const [activeViewBid, setActiveViewBid] = useState({});
   const [searchedColumn, setSearchedColumn] = useState("");
   const [isSubmittedBidModalOpen, setIsSubmittedBidModalOpen] = useState(false);
+  const [isViewBidModalOpen, setIsViewBidModalOpen] = useState(false);
   const { data } = useSelector((state) => state.user);
   const searchInput = useRef(null);
 
@@ -191,7 +194,10 @@ export default function SupplierSavedBids() {
       render: (text, record) => {
         return (
           <p
-            onClick={() => setIsSubmittedBidModalOpen(true)}
+            onClick={() => {
+              setIsViewBidModalOpen(true);
+              setActiveViewBid(record);
+            }}
             className="table-view-text"
           >
             View
@@ -213,12 +219,12 @@ export default function SupplierSavedBids() {
       />
 
       <Modal
-        title={<p className="modal-heading">Submitted Bid</p>}
-        open={isSubmittedBidModalOpen}
-        onCancel={() => setIsSubmittedBidModalOpen(false)}
+        // title={<p className="modal-heading">Bid Insights</p>}
+        open={isViewBidModalOpen}
+        onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}
       >
-        <p style={{ textAlign: "center" }}>(placeholder)</p>
+        <ViewBid bid={activeViewBid} />
       </Modal>
     </div>
   );
