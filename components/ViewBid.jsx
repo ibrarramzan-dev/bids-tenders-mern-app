@@ -103,7 +103,7 @@ export default function ViewBid({ bid, onBidSave }) {
             style={{ marginRight: "0.4rem", fontSize: "0.98rem" }}
             target="_blank"
           >
-            <FileTextOutlined />
+            <FileTextOutlined style={{ fontSize: "1.15rem" }} />
           </Link>
         ))}
 
