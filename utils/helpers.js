@@ -17,7 +17,7 @@ export const formatTimeForTable = (bids) => {
 };
 
 export const mapBidTypeToFullForm = (type) => {
-  return bidTypes.find((obj) => obj.value).label;
+  return bidTypes.find((obj) => obj.value === type).label;
 };
 
 export const isBidClosed = (closingDate) => {

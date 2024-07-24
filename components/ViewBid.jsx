@@ -15,6 +15,8 @@ export default function ViewBid({ bid, onBidSave }) {
   const [isSaved, setIsSaved] = useState(false);
   const { type: userType, data } = useSelector((state) => state.user);
 
+  console.log("Bid: ", bid);
+
   const {
     createdAt,
     title,
@@ -29,6 +31,7 @@ export default function ViewBid({ bid, onBidSave }) {
     status,
     submissionLinkOrEmail,
     attachments,
+    eTendering,
   } = bid;
 
   const onApply = () => {
@@ -78,7 +81,8 @@ export default function ViewBid({ bid, onBidSave }) {
           </Tag>
 
           {userType === "supplier" &&
-          !isBidClosed(bid.submissionClosingDate) ? (
+          !isBidClosed(bid.submissionClosingDate) &&
+          eTendering ? (
             <Tag onClick={onApply} color="blue" className="ViewBid-apply-tag">
               APPLY <RightOutlined />
             </Tag>
@@ -87,7 +91,8 @@ export default function ViewBid({ bid, onBidSave }) {
           {renderSaved()}
 
           {!isBidClosed(bid.submissionClosingDate) &&
-          userType !== "supplier" ? (
+          userType !== "supplier" &&
+          eTendering ? (
             <Alert message="Login as supplier to apply" type="warning" />
           ) : null}
         </div>
