@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import FullScreenLoader from "@/components/FullScreenLoader";
 import ClientSuppliersList from "@/components/ClientSuppliersList";
+import ClientAddMember from "@/components/ClientAddMember";
 
 const dashboardMenu = [
   "Published bids",
@@ -17,6 +18,8 @@ const dashboardMenu = [
   "Reports",
   "Evaluation panels",
   "Suppliers list",
+  "Add a member",
+  "View members",
 ];
 
 export default function ClientDashboard() {
@@ -71,6 +74,7 @@ export default function ClientDashboard() {
           <ClientEvaluationPanels />
         ) : null}*/}
           {activeMenuItem === "Suppliers list" ? <ClientSuppliersList /> : null}
+          {activeMenuItem === "Add a member" ? <ClientAddMember /> : null}
         </div>
       </DashboardLayout>
     </div>

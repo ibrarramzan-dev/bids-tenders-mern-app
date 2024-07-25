@@ -29,3 +29,7 @@ export const isBidClosed = (closingDate) => {
 
   return new Date() > closingDateObj;
 };
+
+export const formatTextWithoutSpaceLowerCase = (text) => {
+  return text.replace(/\s+/g, "").toLowerCase();
+};

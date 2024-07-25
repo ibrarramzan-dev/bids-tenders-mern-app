@@ -14,5 +14,8 @@ export async function PUT(request, { params }) {
     { $addToSet: { members: { email, password } } }
   );
 
-  return NextResponse.json({ message: "Member added" }, { status: 200 });
+  return NextResponse.json(
+    { message: "Member added", success: true },
+    { status: 200 }
+  );
 }
