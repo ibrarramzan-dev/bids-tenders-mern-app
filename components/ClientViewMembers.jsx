@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { Button, Input, Space, Table } from "antd";
 import Highlighter from "react-highlight-words";
 import { useSelector } from "react-redux";
@@ -149,16 +153,26 @@ export default function ClientViewMembers() {
       title: "Password",
       dataIndex: "password",
       key: "password",
+      render: (text) => {
+        return (
+          <Input.Password
+            value={text}
+            visibilityToggle={{ defaultVisible: false }}
+          />
+        );
+      },
     },
   ];
 
   return (
     <div>
+      <p className="dashboard-heading">View members</p>
+
       <Table
         columns={columns}
         dataSource={members}
         pagination={{ pageSize: 50 }}
-        scroll={{ x: 1200, y: 400 }}
+        // scroll={{ x: 1200, y: 400 }}
         style={{ width: "95%" }}
       />
     </div>
