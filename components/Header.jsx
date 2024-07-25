@@ -145,6 +145,20 @@ export default function Header() {
             JSON.stringify({ type: "supplier", data })
           );
           dispatch(login({ type: "supplier", data }));
+
+          notification.success({
+            message: "Success",
+            description: (
+              <p>
+                Supplier <b>{data.agencyName}</b> logged in
+              </p>
+            ),
+          });
+        } else {
+          notification.error({
+            message: "Login failed",
+            description: <p>Incorrect Email or Password</p>,
+          });
         }
       })
       .catch((err) => console.log("Error: ", err));
@@ -163,6 +177,20 @@ export default function Header() {
             JSON.stringify({ type: "client", data })
           );
           dispatch(login({ type: "client", data }));
+
+          notification.success({
+            message: "Success",
+            description: (
+              <p>
+                Client <b>{data.agencyName}</b> logged in
+              </p>
+            ),
+          });
+        } else {
+          notification.error({
+            message: "Login failed",
+            description: <p>Incorrect Email or Password</p>,
+          });
         }
       })
       .catch((err) => console.log("Error: ", err));
