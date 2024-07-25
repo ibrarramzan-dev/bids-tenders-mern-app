@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import FullScreenLoader from "@/components/FullScreenLoader";
 import ClientSuppliersList from "@/components/ClientSuppliersList";
 import ClientAddMember from "@/components/ClientAddMember";
+import ClientViewMembers from "@/components/ClientViewMembers";
 
 const dashboardMenu = [
   "Published bids",
@@ -75,6 +76,7 @@ export default function ClientDashboard() {
         ) : null}*/}
           {activeMenuItem === "Suppliers list" ? <ClientSuppliersList /> : null}
           {activeMenuItem === "Add a member" ? <ClientAddMember /> : null}
+          {activeMenuItem === "View members" ? <ClientViewMembers /> : null}
         </div>
       </DashboardLayout>
     </div>
