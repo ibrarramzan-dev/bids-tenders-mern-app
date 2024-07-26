@@ -7,7 +7,24 @@ export async function POST(request) {
 
   await connectMongoDB();
 
-  const client = await Client.findOne({ email, password });
+  const client = await Client.findOne({
+    $or: [
+      {
+        email,
+        password,
+      },
+      {
+        "members.email": email,
+        "members.password": password,
+      },
+    ],
+  });
+
+  console.log("client: ", client);
+
+  if (!client) {
+    const client = await Client.findOne({ email, password });
+  }
 
   const response = {
     message: "Client not authorized",

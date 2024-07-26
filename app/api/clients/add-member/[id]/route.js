@@ -9,7 +9,7 @@ export async function PUT(request, { params }) {
 
   await connectMongoDB();
 
-  const updatedClient = await Client.findOneAndUpdate(
+  await Client.findOneAndUpdate(
     { _id: id },
     { $addToSet: { members: { email, password } } }
   );
