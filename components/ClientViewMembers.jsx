@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import {
-  EyeInvisibleOutlined,
-  EyeTwoTone,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Space, Table } from "antd";
 import Highlighter from "react-highlight-words";
 import { useSelector } from "react-redux";

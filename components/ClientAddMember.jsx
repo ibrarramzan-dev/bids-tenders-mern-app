@@ -1,14 +1,17 @@
+import { updateClientMembers } from "@/app/AppState/Features/user/userSlice";
 import { formatTextWithoutSpaceLowerCase } from "@/utils/helpers";
 import { Button, Form, Input, notification } from "antd";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const { useForm } = Form;
 
 export default function ClientAddMember() {
   const [addMemberForm] = useForm();
 
-  const { data } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const { type, data } = useSelector((state) => state.user);
 
   const onAddMember = (values) => {
     axios
@@ -23,6 +26,13 @@ export default function ClientAddMember() {
               "email"
             )} added to your company`,
           });
+
+          dispatch(
+            updateClientMembers({
+              type,
+              data: { ...data, members: [...data.members, values] },
+            })
+          );
 
           addMemberForm.resetFields();
         }
