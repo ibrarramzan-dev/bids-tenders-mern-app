@@ -31,8 +31,6 @@ export async function POST(request) {
     success: false,
   };
 
-  console.log(client);
-
   if (client) {
     response.message = "Client authorized";
     response.success = true;
