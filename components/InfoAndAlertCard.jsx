@@ -5,6 +5,8 @@ export default function InfoAndAlertCard({ moment, type, message }) {
     <div className="InfoAndAlertCard">
       <p>{moment}</p>
 
+      <hr />
+
       <Alert
         message={message}
         type={type}
