@@ -4,7 +4,7 @@ import DashboardLayout from "@/components/DashboardLayout";
 import SupplierSavedBids from "@/components/SupplierSavedBids";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
-import SupplierInfoAlerts from "@/components/SupplierInfoAlerts";
+import SupplierAlerts from "@/components/SupplierAlerts";
 
 const dashboardMenu = ["Saved bids", "Info & alerts"];
 
@@ -32,7 +32,7 @@ export default function SupplierDashboard() {
     >
       <div className="ClientDashboard">
         {activeMenuItem === "Saved bids" ? <SupplierSavedBids /> : null}
-        {activeMenuItem === "Info & alerts" ? <SupplierInfoAlerts /> : null}
+        {activeMenuItem === "Info & alerts" ? <SupplierAlerts /> : null}
       </div>
     </DashboardLayout>
   );
