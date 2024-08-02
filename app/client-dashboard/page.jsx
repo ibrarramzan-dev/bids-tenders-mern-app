@@ -12,6 +12,7 @@ import FullScreenLoader from "@/components/FullScreenLoader";
 import ClientSuppliersList from "@/components/ClientSuppliersList";
 import ClientAddMember from "@/components/ClientAddMember";
 import ClientViewMembers from "@/components/ClientViewMembers";
+import ClientReports from "@/components/ClientReports";
 
 const dashboardMenu = [
   "Published bids",
@@ -69,8 +70,8 @@ export default function ClientDashboard() {
         <div className="ClientDashboard">
           {activeMenuItem === "Published bids" ? <ClientPublishedBids /> : null}
           {activeMenuItem === "Post a bid" ? <ClientPostABid /> : null}
+          {activeMenuItem === "Reports" ? <ClientReports /> : null}
           {/* {activeMenuItem === "Tender box" ? <ClientTenderBox /> : null}
-        {activeMenuItem === "Reports" ? <ClientReports /> : null}
         {activeMenuItem === "Evaluation panels" ? (
           <ClientEvaluationPanels />
         ) : null}*/}
