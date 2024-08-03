@@ -55,9 +55,41 @@ export default function ClientPostABid() {
     axios
       .post("/api/bids", values)
       .then((res) => {
-        const { success } = res.data;
+        const { data, success } = res.data;
 
         if (success) {
+          const { eTendering, members, title, _id } = data;
+
+          if (eTendering && members.length > 0) {
+            const html = `
+            <h1>Dear Evaluation Committee member,</h1>
+            
+            <p>This message serves as a reminder that you have been selected as a member of the
+            evaluation committee for ${title} with Bid Number: ${_id}.
+            To facilitate your access to the necessary evaluation materials, please use the
+            following access key: [XXXX]</p>
+            
+            <br />
+            <b>Somali Bids.</b>
+            `;
+
+            const recipients = members.map((member) => member.email);
+
+            axios
+              .post("/api/send-email", {
+                to: recipients,
+                subject: "New Evaluation Bid",
+                html,
+              })
+              .then((res) => {
+                const { success } = res.data;
+                if (success) {
+                  console.log("email sent to members");
+                }
+              })
+              .catch((err) => console.log("error: ", err));
+          }
+
           notification.success({
             message: "Success",
             description: `Bid ${postBidForm.getFieldValue(
