@@ -58,16 +58,17 @@ export default function ClientPostABid() {
         const { data, success } = res.data;
 
         if (success) {
-          const { eTendering, members, title, _id } = data;
+          const { eTendering, members, title, _id, accessKey } = data;
 
           if (eTendering && members.length > 0) {
             const html = `
             <h1>Dear Evaluation Committee member,</h1>
             
             <p>This message serves as a reminder that you have been selected as a member of the
-            evaluation committee for ${title} with Bid Number: ${_id}.
-            To facilitate your access to the necessary evaluation materials, please use the
-            following access key: [XXXX]</p>
+            evaluation committee for <u>${title}</u> with Bid Number: ${_id}.</p>
+
+            <p>To facilitate your access to the necessary evaluation materials, please use the
+            following Access key: <b>${accessKey}</b></p>
             
             <br />
             <b>Somali Bids.</b>

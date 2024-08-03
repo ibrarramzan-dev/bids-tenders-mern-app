@@ -1,9 +1,18 @@
 import connectMongoDB from "@/libs/mongodb";
 import Bid from "@/models/bid";
+import { generateRandomString } from "@/utils/helpers";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
   const payload = await request.json();
+
+  const randomString = generateRandomString();
+
+  const { eTendering, members } = payload;
+
+  if (eTendering && members.length > 0) {
+    payload.accessKey = randomString;
+  }
 
   console.log("Payload: ", payload);
 

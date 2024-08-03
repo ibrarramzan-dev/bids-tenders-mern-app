@@ -33,3 +33,12 @@ export const isBidClosed = (closingDate) => {
 export const formatTextWithoutSpaceLowerCase = (text) => {
   return text.replace(/\s+/g, "").toLowerCase();
 };
+
+export const generateRandomString = () => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  return Array.from({ length: 6 }, () =>
+    characters.charAt(Math.floor(Math.random() * characters.length))
+  ).join("");
+};

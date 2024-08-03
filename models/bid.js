@@ -27,6 +27,7 @@ const bidSchema = new Schema(
     featured: Boolean,
     eTendering: Boolean,
     members: [membersSchema],
+    accessKey: String,
     savedTo: [savedToSchema],
   },
   {
