@@ -98,9 +98,9 @@ export default function ClientPostABid() {
             )} has been published`,
           });
 
-          postBidForm.resetFields();
-          setAttachmentDocs([]);
-          setMembers([]);
+          // postBidForm.resetFields();
+          // setAttachmentDocs([]);
+          // setMembers([]);
         }
       })
       .catch((err) => console.log("Error: ", err));
