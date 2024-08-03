@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  service: "zoho",
-  host: "smtp.zoho.com",
-  port: 465,
-  secure: true,
+let transportmail = nodemailer.createTransport({
+  service: "gmail",
   auth: {
-    user: "no-reply@bids-tenders-mern-app.netlify.app",
-    pass: process.env.NEXT_PUBLIC_ZOHO_PWD, // App password, not the account password
+    user: "ibrarramzan.dev@gmail.com",
+    pass: "twco vshv ljnp hhso",
   },
 });
 
@@ -16,13 +13,12 @@ export async function POST(request) {
   const { to, subject, html } = await request.json();
 
   let mail = {
-    from: "no-reply@bids-tenders-mern-app.netlify.app",
     to,
     subject,
     html,
   };
 
-  transporter.sendMail(mail, function (err, val) {
+  transportmail.sendMail(mail, function (err, val) {
     if (err) {
       console.log(err);
     } else {
