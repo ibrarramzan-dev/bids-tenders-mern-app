@@ -29,6 +29,7 @@ const bidSchema = new Schema(
     members: [membersSchema],
     accessKey: String,
     savedTo: [savedToSchema],
+    appliedBy: [String],
   },
   {
     timestamps: true,

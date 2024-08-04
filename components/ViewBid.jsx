@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Tag } from "antd";
+import { Alert, notification, Tag } from "antd";
 import { HeartFilled, HeartOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -35,7 +35,19 @@ export default function ViewBid({ bid, onBidSave }) {
   } = bid;
 
   const onApply = () => {
-    alert("applied");
+    axios
+      .put(`/api/bids/${bid._id}/apply?supplierId=${data._id}`)
+      .then((res) => {
+        const { success } = res.data;
+
+        if (success) {
+          notification.success({
+            message: "Success",
+            description: <p>You've applied!</p>,
+          });
+        }
+      })
+      .catch((err) => console.log("Error: ", err));
   };
 
   const onSave = () => {

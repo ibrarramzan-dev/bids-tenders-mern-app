@@ -67,8 +67,8 @@ export default function ClientPostABid() {
             <p>This message serves as a reminder that you have been selected as a member of the
             evaluation committee for <u>${title}</u> with Bid Number: ${_id}.</p>
 
-            <p>To facilitate your access to the necessary evaluation materials, please use the
-            following Access key: <b>${accessKey}</b></p>
+            <p>To facilitate your access to the necessary evaluation materials, please use the access link: 
+            <a href="https://bids-tenders-mern-app.netlify.app/bid/${_id}/evaluation?accessKey=${accessKey}">https://bids-tenders-mern-app.netlify.app/bid/${_id}/evaluation?accessKey=${accessKey}</a></p>
             
             <br />
             <b>Somali Bids.</b>
@@ -98,9 +98,9 @@ export default function ClientPostABid() {
             )} has been published`,
           });
 
-          postBidForm.resetFields();
-          setAttachmentDocs([]);
-          setMembers([]);
+          // postBidForm.resetFields();
+          // setAttachmentDocs([]);
+          // setMembers([]);
         }
       })
       .catch((err) => console.log("Error: ", err));
