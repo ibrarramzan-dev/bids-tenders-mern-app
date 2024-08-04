@@ -220,14 +220,32 @@ export default function BidsListHome() {
     },
   ];
 
+  const onBidApplied = (title) => {
+    axios
+      .get("/api/bids")
+      .then((res) => {
+        const bids = res.data;
+        const _bids = formatTimeForTable(bids);
+        dispatch(loadBids(_bids));
+
+        notification.success({
+          message: "Success",
+          description: `You've applied to Bid ${title}`,
+        });
+
+        setIsViewBidModalOpen(false);
+      })
+      .catch((err) => console.log("Error: ", err));
+  };
+
   const onBidSave = (title) => {
     axios
       .get("/api/bids")
       .then((res) => {
         const bids = res.data;
-
         const _bids = formatTimeForTable(bids);
         dispatch(loadBids(_bids));
+
         notification.success({
           message: "Success",
           description: `Bid ${title} has been saved`,
@@ -258,7 +276,11 @@ export default function BidsListHome() {
         onCancel={() => setIsViewBidModalOpen(false)}
         footer={false}
       >
-        <ViewBid bid={activeViewBid} onBidSave={onBidSave} />
+        <ViewBid
+          bid={activeViewBid}
+          onBidSave={onBidSave}
+          onBidApplied={onBidApplied}
+        />
       </Modal>
     </section>
   );

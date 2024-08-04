@@ -4,13 +4,13 @@ import { NextResponse } from "next/server";
 
 export async function PUT(request, { params }) {
   const { id } = params;
-  const supplierId = request.nextUrl.searchParams.get("supplierId");
+  const payload = await request.json();
 
   await connectMongoDB();
 
   await Bid.findOneAndUpdate(
     { _id: id },
-    { $addToSet: { appliedBy: supplierId } }
+    { $addToSet: { appliedBy: payload } }
   );
 
   return NextResponse.json(

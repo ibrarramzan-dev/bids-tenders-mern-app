@@ -9,6 +9,14 @@ const savedToSchema = new Schema({
   supplierId: String,
 });
 
+const appliedBySchema = new Schema({
+  supplierId: String,
+  comments: String,
+  financialDoc: String,
+  technicalDoc: String,
+  otherDocs: [String],
+});
+
 const bidSchema = new Schema(
   {
     clientId: String,
@@ -29,7 +37,7 @@ const bidSchema = new Schema(
     members: [membersSchema],
     accessKey: String,
     savedTo: [savedToSchema],
-    appliedBy: [String],
+    appliedBy: [appliedBySchema],
   },
   {
     timestamps: true,

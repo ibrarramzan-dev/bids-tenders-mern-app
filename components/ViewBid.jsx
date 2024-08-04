@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, notification, Tag } from "antd";
+import { Alert, Modal, notification, Tag } from "antd";
 import { HeartFilled, HeartOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -10,9 +10,12 @@ import Link from "next/link";
 import { FileTextOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import SupplierApply from "./SupplierApply";
 
-export default function ViewBid({ bid, onBidSave }) {
+export default function ViewBid({ bid, onBidSave, onBidApplied }) {
   const [isSaved, setIsSaved] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
+  const [isApplyOpen, setIsApplyOpen] = useState(false);
   const { type: userType, data } = useSelector((state) => state.user);
 
   console.log("Bid: ", bid);
@@ -34,17 +37,16 @@ export default function ViewBid({ bid, onBidSave }) {
     eTendering,
   } = bid;
 
-  const onApply = () => {
+  const onApplyClick = (values) => {
     axios
-      .put(`/api/bids/${bid._id}/apply?supplierId=${data._id}`)
+      .put(`/api/bids/${bid._id}/apply`, { ...values, supplierId: data._id })
       .then((res) => {
         const { success } = res.data;
 
         if (success) {
-          notification.success({
-            message: "Success",
-            description: <p>You've applied!</p>,
-          });
+          onBidApplied(bid.title);
+          setIsApplied(true);
+          setIsApplyOpen(false);
         }
       })
       .catch((err) => console.log("Error: ", err));
@@ -64,7 +66,33 @@ export default function ViewBid({ bid, onBidSave }) {
       .catch((err) => console.log("Error: ", err));
   };
 
-  const renderSaved = () => {
+  const renderApply = () => {
+    if (
+      userType === "supplier" &&
+      !isBidClosed(bid.submissionClosingDate) &&
+      eTendering
+    ) {
+      if (bid.appliedBy.find((obj) => obj.supplierId === data._id)) {
+        return (
+          <Tag color="gold-inverse" disabled className="ViewBid-applied-tag">
+            APPLIED
+          </Tag>
+        );
+      } else {
+        return (
+          <Tag
+            onClick={() => setIsApplyOpen(true)}
+            color="blue"
+            className="ViewBid-apply-tag"
+          >
+            APPLY <RightOutlined />
+          </Tag>
+        );
+      }
+    }
+  };
+
+  const renderSave = () => {
     if (userType !== "guest" && !isBidClosed(bid.submissionClosingDate)) {
       if (bid.savedTo.find((obj) => obj.supplierId === data._id)) {
         return <HeartFilled style={{ marginRight: "0.2rem" }} />;
@@ -92,15 +120,8 @@ export default function ViewBid({ bid, onBidSave }) {
             {isBidClosed(bid.submissionClosingDate) ? "Closed" : "Open"}
           </Tag>
 
-          {userType === "supplier" &&
-          !isBidClosed(bid.submissionClosingDate) &&
-          eTendering ? (
-            <Tag onClick={onApply} color="blue" className="ViewBid-apply-tag">
-              APPLY <RightOutlined />
-            </Tag>
-          ) : null}
-
-          {renderSaved()}
+          {renderApply()}
+          {renderSave()}
 
           {!isBidClosed(bid.submissionClosingDate) &&
           userType !== "supplier" &&
@@ -179,6 +200,15 @@ export default function ViewBid({ bid, onBidSave }) {
           <Tag>{item}</Tag>
         ))}
       </p>
+
+      <Modal
+        // title={<p className="modal-heading">Bid</p>}
+        open={isApplyOpen}
+        onCancel={() => setIsApplyOpen(false)}
+        footer={false}
+      >
+        <SupplierApply onApplyClick={onApplyClick} />
+      </Modal>
     </div>
   );
 }
