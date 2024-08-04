@@ -210,7 +210,7 @@ export default function SupplierEditPersonalInfo({ onEditPersonalInfoSubmit }) {
 
         <Form.Item>
           <Button type="primary" htmlType="submit" className="submit-btn">
-            Sign up
+            Update Info
           </Button>
         </Form.Item>
       </Form>
